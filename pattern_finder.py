@@ -1,5 +1,3 @@
-
-
 def finder(pattern,dataset):
     d = [[element for element in row] for row in dataset]
     #find all index points that the patterns have in common

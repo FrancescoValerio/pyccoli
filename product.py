@@ -1,6 +1,7 @@
 """
     Contain all code regarding to candidate prodiction for PYCCOLI 
 """
+#%%
 #Imports
 import multiprocessing as mp
 import itertools
@@ -23,7 +24,7 @@ def product(codetable_a,codetable_b):
         results = pool.map(pattern_combiner,combinations)
     
 
-    return results
+    return list(set(results))
     
 
 def pattern_combiner(x):
@@ -52,6 +53,9 @@ def pattern_combiner(x):
         # Else create key value pait
         else:
             comb_p[row[0]] = [x for x in row[1]]
-    return tuple((key,tuple(value)) for key,value in comb_p.items())    
+    return tuple((key,tuple(comb_p[key])) for key in sorted(comb_p))    
     
 
+
+
+# %%

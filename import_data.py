@@ -32,5 +32,16 @@ def import_dat(file: str):
     for key in singleton_table:
         #(support,total_length_pattern,timespan_of_pattern )
         singleton_table[key] = (singleton_table[key],1,1)
-    return singleton_table, dataset
+    return singleton_table, dataset, candidates(dataset)
             
+def candidates(dataset):
+    cand = []
+    for x in range(len(dataset[0])):
+        for y in range(len(dataset)):
+            # Every horizontal candidate
+            if x > 0:
+                cand.append( ((y,(dataset[y][x-1],dataset[y][x])),) )
+            if y > 0:
+                cand.append( ((y-1,(dataset[y-1][x])),(y,(dataset[y][x]))))
+    return list(set(cand))
+                
