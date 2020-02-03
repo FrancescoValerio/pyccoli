@@ -90,7 +90,7 @@ if __name__ == "__main__":
         if mdl_calc(ct,d,st)<mdl:
             mdl = mdl_calc(ct,d,st)
             with open(f'./plus_{filename}_{gen}.txt','w') as o:
-                for key,value in output.items():
+                for key,value in ct.items():
                     print(f'{key} \t {value}',file=o)
         else:
             break
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         if mdl_calc(ct,d,st)<mdl:
             mdl = mdl_calc(ct,d,st)
             with open(f'./min_{filename}_{gen}.txt','w') as o:
-                for key,value in output.items():
+                for key,value in ct.items():
                     print(f'{key} \t {value}',file=o)
         else:
             break
