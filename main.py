@@ -78,20 +78,28 @@ def ditto_min(st,ct,d):
     return ct
 
 if __name__ == "__main__":
-
+    filename = 'plant3'
     st, d, cand = import_dat('./plant3.dat')
     ct = st.copy()
     mdl = mdl_calc(ct,d,st)
     print(f'Original MDL:{mdl}')
+    gen = 0
     while True:
+        gen += 1
         ct, used = ditto_plus(cand,st,ct,d,mdl)
         if mdl_calc(ct,d,st)<mdl:
             mdl = mdl_calc(ct,d,st)
+            with open(f'./plus_{filename}_{gen}.txt','w') as o:
+                for key,value in output.items():
+                    print(f'{key} \t {value}',file=o)
         else:
             break
         ct = ditto_min(st,ct,d)
         if mdl_calc(ct,d,st)<mdl:
             mdl = mdl_calc(ct,d,st)
+            with open(f'./min_{filename}_{gen}.txt','w') as o:
+                for key,value in output.items():
+                    print(f'{key} \t {value}',file=o)
         else:
             break
         cand = product(ct,used)
