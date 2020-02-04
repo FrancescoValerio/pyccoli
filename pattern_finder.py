@@ -1,6 +1,8 @@
 def finder(pattern,dataset):
-    d = [[element for element in row] for row in dataset]
-    #find all index points that the patterns have in common
+    if not isinstance(dataset,list):
+        d= [[x for x in row] for row in dataset]
+    else:
+        d=dataset    #find all index points that the patterns have in common
     found_indexes = []
     time_length = 0
     
@@ -28,7 +30,10 @@ def finder(pattern,dataset):
 
 # %%
 def painter(pattern,dataset,sign=-1):
-    d= [[x for x in row] for row in dataset]
+    if not isinstance(dataset,list):
+        d= [[x for x in row] for row in dataset]
+    else:
+        d=dataset
     index_points = finder(pattern,dataset)
     for point in index_points:
         first = True

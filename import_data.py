@@ -32,7 +32,8 @@ def import_dat(file: str):
     for key in singleton_table:
         #(support,total_length_pattern,timespan_of_pattern )
         singleton_table[key] = (singleton_table[key],1,1)
-    return singleton_table, dataset, candidates(dataset)
+    return singleton_table, dataset
+            
             
 def candidates(dataset):
     cand = []
