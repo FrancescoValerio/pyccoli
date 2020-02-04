@@ -48,7 +48,7 @@ def ditto_plus(cand_,st,ct,d,mdl,cpu=0):
                     found = True
                     break
         if not found:
-            print(f'Finished adding:\t\t{mdl}')
+            print(f'After adding codes:\t\t{mdl}')
             break
     return ct, used
 
@@ -80,13 +80,13 @@ def ditto_min(st,ct,d,cpu=0):
                     found = True
                     break
         if not found:
-            print(f'Finished pruning:\t\t{mdl}')
+            print(f'After pruning codes:\t\t{mdl}')
             break
     return ct
 
 if __name__ == "__main__":
     output_generation = False
-    filename = 'aapl'
+    filename = 'AAPL_5y_comp'
     st, d = import_dat(f'./{filename}.dat')
     
     

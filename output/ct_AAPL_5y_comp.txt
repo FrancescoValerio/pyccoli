@@ -1,0 +1,8 @@
+This is automated documentation for file AAPL_5y_comp
+ the following columns are represented within 
+AAPL_5y_comp.dat 
+1. Open-AAPL_-LB
+2. High-AAPL_-LB
+3. Low-AAPL_-LB
+4. Close-AAPL_-LB
+5. Volume-AAPL_-LB
