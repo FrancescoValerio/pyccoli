@@ -1,0 +1,31 @@
+This is automated documentation for file dowj_5y_close
+ the following columns are represented within 
+dowj_5y_close.dat 
+1. Close-BA_-LB
+2. Close-UNH_-LB
+3. Close-MCD_-LB
+4. Close-HD_-LB
+5. Close-AAPL_-LB
+6. Close-MMM_-LB
+7. Close-TRV_-LB
+8. Close-DIS_-LB
+9. Close-JNJ_-LB
+10. Close-IBM_-LB
+11. Close-MSFT_-LB
+12. Close-CAT_-LB
+13. Close-UTX_-LB
+14. Close-AXP_-LB
+15. Close-CVX_-LB
+16. Close-JPM_-LB
+17. Close-PG_-LB
+18. Close-WMT_-LB
+19. Close-NKE_-LB
+20. Close-MRK_-LB
+21. Close-XOM_-LB
+22. Close-VZ_-LB
+23. Close-CSCO_-LB
+24. Close-WBA_-LB
+25. Close-KO_-LB
+26. Close-INTC_-LB
+27. Close-PFE_-LB
+28. Close-1ndex_DOW_-LB

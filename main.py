@@ -86,7 +86,7 @@ def ditto_min(st,ct,d,cpu=0):
 
 if __name__ == "__main__":
     output_generation = False
-    filename = 'AAPL_5y_comp'
+    filename = 'dowj_5y_close'
     st, d = import_dat(f'./{filename}.dat')
     
     

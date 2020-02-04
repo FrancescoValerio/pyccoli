@@ -1,5 +1,7 @@
 import pickle
-
+'''
+Work in progress
+'''
 def load_dictionary(file):
     with open(file, 'rb') as pickled_dict:
         return pickle.load(pickled_dict)

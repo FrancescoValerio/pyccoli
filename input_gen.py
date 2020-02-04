@@ -162,12 +162,12 @@ def export_to_pyccoli(dataframe,output_file):
         print(f'{counter}. {head}',   file = text_file)
             
 def index_list(index):
-    if index in ('dow','DOW','Dow'):
-        file = './Data/Components of the Dow Jones.csv'
+    if index in ('dow','DOW','Dow',"dowj"):
+        file = './Component_data/Components of the Dow Jones.csv'
     elif index in ('ndaq','nsdaq','ndq'):
-        file = './Data/Components of the Nasdaq 100.csv'
+        file = './Component_data/Components of the Nasdaq 100.csv'
     elif index in ('sp','sp500'):
-        file = './Data/Components of the S&P 500.csv'
+        file = './Component_data/Components of the S&P 500.csv'
     else:
         file = index
     df = pd.read_csv(file,index_col=0, sep='\t')
@@ -177,25 +177,26 @@ def index_list(index):
 #%%
 dow =[]
 
-#for x in index_list('sp'):
+for x in index_list('dowj'):
     
-    #if x in ('V','GS','DOW'):
-     #   continue
+    if x in ('V','GS','DOW'):
+        continue
     
-    #dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
-    #dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
-#dow = join_dataframes(*dow)
+    dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
+dow = join_dataframes(*dow)
 
-dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
-#a = filter_columns(dow,'Close')
-a = remove_NaN_rows(dow)
+#dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
+dow = filter_columns(dow,'Close')
+dow = remove_NaN_rows(dow)
 #%%
-a = row_diff(a)
+a = row_diff(dow)
+a = a.iloc[-1500:,:]
 a = kmean_columns(a,5)
 #a = filter_columns(a,'LB')
 
-export_to_pyccoli(filter_columns(a,'LB'),'AAPL_5y_comp')
-a.to_excel('AAPL_5y_comp.xlsx')
+export_to_pyccoli(filter_columns(a,'LB'),'dowj_5y_close')
+a.to_excel('dowj_5y_close.xlsx')
 
 
 
