@@ -5,7 +5,10 @@ def load_dictionary(file):
         return pickle.load(pickled_dict)
     
     
-
+    with open(file,'r') as dat_file:
+        for line in dat_file:
+            dataset.append([int(x) for x in line.split()])
+    
 def painter(pattern,dataset,sign=-1):
     if not isinstance(dataset,list):
         d= [[x for x in row] for row in dataset]
