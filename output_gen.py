@@ -1,3 +1,4 @@
+#%%
 import pickle
 '''
 Work in progress
@@ -6,10 +7,10 @@ def load_dictionary(file):
     with open(file, 'rb') as pickled_dict:
         return pickle.load(pickled_dict)
     
-    
-    with open(file,'r') as dat_file:
-        for line in dat_file:
-            dataset.append([int(x) for x in line.split()])
+def write_dict(d, file):   
+    with open(f'{file}.txt','w') as out:
+        for k,v in d.items():
+            print(f'{k}\t\t\t{v}', file=out)
     
 def painter(pattern,dataset,sign=-1):
     if not isinstance(dataset,list):
