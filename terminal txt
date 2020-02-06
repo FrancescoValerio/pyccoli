@@ -1,0 +1,33 @@
+PS C:\Users\Francesco> cd .\Git\pyccoli\
+PS C:\Users\Francesco\Git\pyccoli> python .\main.py AAPL
+Original MDL:                   31725.797803417467
+After adding codes:             26450.456826830254
+After pruning codes:            24492.339150751235
+After adding codes:             21913.271600307777
+After pruning codes:            20323.81082792753
+After adding codes:             19477.827066581813
+After pruning codes:            19192.196450098036
+After adding codes:             19152.13917636386
+After pruning codes:            19149.277980098563
+After adding codes:             19149.277980098563
+After pruning codes:            19149.277980098563
+Finished
+PS C:\Users\Francesco\Git\pyccoli>
+PS C:\Users\Francesco\Git\pyccoli> python .\main.py DOWJ
+Original MDL:                   283712.1426614135
+After adding codes:             226778.94246807584
+After pruning codes:            220244.33860900108
+After adding codes:             211227.12701261137
+After pruning codes:            207786.9433385728
+After adding codes:             206932.83552371926
+After pruning codes:            206223.80528553916
+After adding codes:             206193.08909281742
+After pruning codes:            205954.6332339071
+After adding codes:             205954.6332339071
+After pruning codes:            205878.67156197765
+After adding codes:             205878.67156197765
+After pruning codes:            205876.81164591888
+After adding codes:             205876.81164591888
+After pruning codes:            205876.81164591888
+Finished
+PS C:\Users\Francesco\Git\pyccoli>
