@@ -175,29 +175,30 @@ def index_list(index):
 #aapl=import_csv_to_df('./Data/AAPL.csv')
 
 #%%
-dow =[]
+def f1():
+    dow =[]
 
-for x in index_list('dowj'):
-    
-    if x in ('V','GS','DOW'):
-        continue
-    
-    dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
-dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
-dow = join_dataframes(*dow)
+    for x in index_list('dowj'):
+        
+        if x in ('V','GS','DOW'):
+            continue
+        
+        dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
+    dow = join_dataframes(*dow)
 
-#dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
-dow = filter_columns(dow,'Close')
-dow = remove_NaN_rows(dow)
-#%%
-a = row_diff(dow)
-a = a.iloc[-1500:,:]
-a = kmean_columns(a,5)
-#a = filter_columns(a,'LB')
+    #dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
+    dow = filter_columns(dow,'Close')
+    dow = remove_NaN_rows(dow)
+    #%%
+    a = row_diff(dow)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
+    #a = filter_columns(a,'LB')
 
-export_to_pyccoli(filter_columns(a,'LB'),'dowj_5y_close')
-a.to_excel('dowj_5y_close.xlsx')
+    export_to_pyccoli(filter_columns(a,'LB'),'dowj_5y_close')
+    a.to_excel('dowj_5y_close.xlsx')
 
 
 
-# %%
+    # %%

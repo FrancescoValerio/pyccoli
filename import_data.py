@@ -34,15 +34,15 @@ def import_dat(file: str):
         singleton_table[key] = (singleton_table[key],1,1)
     return singleton_table, dataset
             
-            
+#Unused code
 def candidates(dataset):
     cand = []
     for x in range(len(dataset[0])):
         for y in range(len(dataset)):
             # Every horizontal candidate
             if x > 0:
-                cand.append( ((y,(dataset[y][x-1],dataset[y][x])),) )
+                cand.append(((y,(dataset[y][x-1],dataset[y][x])),))
             if y > 0:
-                cand.append( ((y-1,(dataset[y-1][x])),(y,(dataset[y][x]))))
+                cand.append(((y-1,(dataset[y-1][x])),(y,(dataset[y][x]))))
     return list(set(cand))
                 

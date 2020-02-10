@@ -53,7 +53,7 @@ def ditto_plus(cand_,st,ct,d,mdl,cpu=0):
     return ct, used
 
 
-    
+
 def ditto_min(st,ct,d,cpu=0):
     if cpu == 0:
         cpu = None

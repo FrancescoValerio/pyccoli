@@ -1,8 +1,10 @@
 #%%
 import pickle
+from pattern_finder import finder
 '''
 Work in progress
 '''
+#Test
 def load_dictionary(file):
     with open(file, 'rb') as pickled_dict:
         return pickle.load(pickled_dict)
@@ -26,7 +28,7 @@ def painter(pattern,dataset,sign=-1):
                 d[row[0]][point:point+len(row[1])] = [sign]*len(row[1])
             else:
                 d[row[0]][point:point+len(row[1])] = [sign]*len(row[1])
-    return d, len(index_points)
+    return d
 #%%
 
         
