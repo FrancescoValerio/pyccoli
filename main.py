@@ -84,9 +84,9 @@ def ditto_min(st,ct,d,cpu=0):
             break
     return ct
 
-if __name__ == "__main__":
+def main(  filename = 'dowj_5y_close'):
     output_generation = False
-    filename = 'dowj_5y_close'
+
     st, d = import_dat(f'./{filename}.dat')
     
     
@@ -134,10 +134,10 @@ if __name__ == "__main__":
             
             
             if not mdl_calc(ct,d,st)<mdl:
-                with open(f'./output/ct_{filename}.txt','w') as o:
+                with open(f'./ct_{filename}.txt','w') as o:
                     for key,value in ct.items():
                         print(f'{key} \t {value}',file=o)
-                with open(f'./output/{filename}.dict','wb') as out_pickle:
+                with open(f'./{filename}.dict','wb') as out_pickle:
                     pickle.dump(ct,out_pickle,protocol=pickle.HIGHEST_PROTOCOL)
                 
                 print('Finished')

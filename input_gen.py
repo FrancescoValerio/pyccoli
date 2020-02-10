@@ -153,7 +153,7 @@ def export_to_pyccoli(dataframe,output_file):
     print(f'This is automated documentation for file {output_file}'+
           '\n the following columns are represented within \n' +
           f'{output_file}.dat ',file = text_file)
-    counter = 0
+    counter = -1
     for head, c in dataframe.iteritems():
         counter +=1
         col=str(list(c)).replace(',','').replace('[','').replace(']','')
