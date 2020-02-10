@@ -195,8 +195,10 @@ for color, start, end in gen_repeating(stock_list['Color']):
     if start > 0: # make sure lines connect
         start -= 1
     idx = stock_list.index[start:end+1]
-    stock_list.loc[idx, 'og_Close-UNH'].plot(ax=ax, color=color, label='United Health')
-    stock_list.loc[idx, 'og_Close-MCD'].plot(ax=ax, color=color, label='McDonalds')
+    stock_list.loc[idx, 'og_Close-UNH'].plot(
+        ax=ax, color=color, label='United Health')
+    stock_list.loc[idx, 'og_Close-MCD'].plot(
+        ax=ax, color=color, label='McDonalds')
 
 #plt.show()
 plt.savefig('books_read3.png')
