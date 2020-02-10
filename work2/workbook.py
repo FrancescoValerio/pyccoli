@@ -8,4 +8,8 @@ the Mcdonalds vis-a-vis United Health Group
 Thus the goal of this workbook it to see if more structure can be
 derived out of both.
 '''
-
+'''
+the top 4 patterns show that those indeed weree the best 
+possible patterns we could find there are larger patterns but they
+are quite infrequent
+'''

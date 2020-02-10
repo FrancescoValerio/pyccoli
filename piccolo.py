@@ -17,10 +17,6 @@ def min_(args):
     x,st,ct,d,mdl = args
     if mdl_calc(rem(x,ct),d,st) < mdl:
         return x   
-     
-def main():
-    pass
-
 
     
 def ditto_plus(cand_,st,ct,d,mdl,cpu=0):
@@ -84,7 +80,7 @@ def ditto_min(st,ct,d,cpu=0):
             break
     return ct
 
-def main(  filename = 'dowj_5y_close'):
+def piccolo(  filename = 'mcduhn5y_close'):
     output_generation = False
 
     st, d = import_dat(f'./{filename}.dat')
@@ -128,7 +124,7 @@ def main(  filename = 'dowj_5y_close'):
             gen += 1
             ct, used = ditto_plus(cand,st,ct,d,mdl,16)
             
-            mdl = mdl_calc(ct,d,st)
+            #mdl = mdl_calc(ct,d,st)
             
             ct = ditto_min(st,ct,d,16)
             
