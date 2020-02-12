@@ -1,3 +1,5 @@
+#%%
+
 '''
 #? Code used to generate this output was:
 
@@ -34,7 +36,6 @@ a.to_excel('dowj_5y_close.xlsx')
 Data has been drawn from the 10th of September 2013
 until august 23 2019.
 '''
-
 #%%
 import numpy as np
 import pandas as pd
@@ -138,30 +139,46 @@ from input_gen import row_diff
 imported_excel = pd.read_excel('./output/dowj_5y_close.xlsx',
                                index_col=0).iloc[1:,1:3]
 
-import_stock_list = []
+import_stocklist = []
 for x in ('UNH','MCD'):
-    import_stock_list.append(import_csv_to_df(f'./Stocks/{x}.csv'))
-stock_list = join_dataframes(*import_stock_list)
-stock_list = remove_NaN_rows(stock_list)
-stock_list = stock_list.iloc[-1500:,:]
+    import_stocklist.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+stocklist = join_dataframes(*import_stocklist)
+stocklist = remove_NaN_rows(stocklist)
+stocklist = stocklist.iloc[-1500:,:]
 
-stock_list = filter_columns(stock_list,'Close')
-stock_list_backup = stock_list.copy()
-stock_list =row_diff(stock_list)
-stock_list['UNH-kmean'] = d[0][1:]
-stock_list['MCD-kmean'] = d[1][1:]
-stock_list['og_UNH-kmean'] = d_og[1][1:]
-stock_list['og_MCD-kmean'] = d_og[2][1:]
-stock_list['og_Close-UNH'] = stock_list_backup['Close-UNH']
-stock_list['og_Close-MCD'] = stock_list_backup['Close-MCD']
-
-
+stocklist = filter_columns(stocklist,'Close')
+stocklist_backup = stocklist.copy()
+stocklist =row_diff(stocklist)
+stocklist['UNH-kmean'] = d[0][1:]
+stocklist['MCD-kmean'] = d[1][1:]
+stocklist['og_UNH-kmean'] = d_og[1][1:]
+stocklist['og_MCD-kmean'] = d_og[2][1:]
+stocklist['og_Close-UNH'] = stocklist_backup['Close-UNH']
+stocklist['og_Close-MCD'] = stocklist_backup['Close-MCD']
 
 
+#%%
+    
 
-# %%
+colordict ={
+    #blue
+    -800: '#00FFFF',
+    #these need to be brighter
+    #orange
+    -400: '#ffc87c',
+    #Green
+    -200: '#2ca02c',
+    #red
+    -100: '#ef2728',
+}
+
+
+stocklist['Color'] = [colordict[x] if x in colordict 
+                       else '#d9d9d9' for x in stocklist['MCD-kmean']]
+
 
 #Now we build the first plot
+'''
 import matplotlib.pyplot as plt
 
 
@@ -186,57 +203,307 @@ colordict ={
     -200: '#15F4EE',
     -100: '#e7FF00',
 }
-stock_list['Color'] = [colordict[x] if x in colordict 
-                       else '#000000' for x in stock_list['MCD-kmean']]
+stocklist['Color'] = [colordict[x] if x in colordict 
+                       else '#000000' for x in stocklist['MCD-kmean']]
 
 fig, ax = plt.subplots(figsize=(120, 10),dpi=120)
 
-for color, start, end in gen_repeating(stock_list['Color']):
+for color, start, end in gen_repeating(stocklist['Color']):
     if start > 0: # make sure lines connect
         start -= 1
-    idx = stock_list.index[start:end+1]
-    stock_list.loc[idx, 'og_Close-UNH'].plot(
+    idx = stocklist.index[start:end+1]
+    stocklist.loc[idx, 'og_Close-UNH'].plot(
         ax=ax, color=color, label='United Health')
-    stock_list.loc[idx, 'og_Close-MCD'].plot(
+    stocklist.loc[idx, 'og_Close-MCD'].plot(
         ax=ax, color=color, label='McDonalds')
 
 #plt.show()
 plt.savefig('books_read3.png')
 '''
+'''
 
 Now we make a nicer plot
 '''
 
-#%%
+'''
 
-from bokeh.plotting import figure, output_file, show
+Bokeh 1
 
-output_file("patch.html")
+def make_array(df,column_name):
+    x = []
+    y = []
+    color = []
+    
+    first = True
+    
+    for index,row in df.iterrows():
+        if first:
+            x_mem = []
+            y_mem = []
+            first = False
+            c = row['Color']
+            color.append(c)
+            x_mem.append(index)
+            y_mem.append(row[column_name])
+        else:
+            if row['Color'] == c:
+                x_mem.append(index)
+                y_mem.append(row[column_name])
+            else:
+                x_mem.append(index)
+                y_mem.append(row[column_name])
+                x.append(x_mem)
+                y.append(y_mem)
+                x_mem = []
+                y_mem = []
+                c = row['Color']
+                color.append(c)
+                x_mem.append(index)
+                y_mem.append(row[column_name])
+    x.append(x_mem)
+    y.append(y_mem)
+    return x,y, color    
 
-p = figure(plot_width=1200, plot_height=400)
+                    
+from bokeh.plotting import figure, show, output_file
+from bokeh.models import HoverTool, ColumnDataSource
+from bokeh.sampledata.autompg import autompg
 
 
-p.multi_line([[1,2,3],[4,5,6]],
-             [[1,2,3],[4,5,6]],
-             color=["firebrick",'blue'], alpha=[0.8], line_width=4)
+
+source = ColumnDataSource(autompg)
+   
+output_file('dab.html')
+
+x,y_unh, color = make_array(stocklist,'og_Close-UNH')
+x,y_mcd, color = make_array(stocklist,'og_Close-MCD')
+
+p = figure(width=1200, height=800, x_axis_type="datetime") 
+p.multi_line(xs=x+x,
+                ys=y_mcd+y_unh,
+                line_color=color+color,
+                line_width=3)
+
+
+p.add_tools(HoverTool(tooltips=[('Value:','$y'),
+                                ('Date:','$x')]))
+show(p)    
+'''
+
+'''
+Bokeh 2
+'''
+'''
+df = stocklist.reset_index()
+df['Date2'] = pd.to_datetime(df['Date'])
+df['ClassMCD'] = df['og_MCD-kmean']
+df['ClassUNH'] = df['og_UNH-kmean']
+
+df['ToolTipDates'] = df.Date.map(lambda x: x.strftime("%y %b %d")) # Saves work with the tooltip later
+
+from bokeh.plotting import figure, show, output_file
+from bokeh.models import HoverTool, ColumnDataSource, CustomJSHover
+from bokeh.palettes import Spectral6
+from bokeh.transform import linear_cmap
+
+
+source = ColumnDataSource(df)
+output_file('dab.html')
+
+p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=800, title="Patterns between Mcdonalds and United Health")
+
+p.line(x='Date', y='og_Close-MCD', source=source,color='grey',line_width=3,line_alpha=0.5)
+p.circle(x='Date', y='og_Close-MCD',name='circle', source=source,color='Color',size=5)
+
+p.line(x='Date', y='og_Close-UNH', source=source,color='grey',line_width=3,line_alpha=0.5)
+p.circle(x='Date', y='og_Close-UNH',name='circle2', source=source,color='Color',size=5)
+
+
+p.add_tools(HoverTool(names=['circle'],tooltips=[('Close :','$y'),
+                                ('Date :','@ToolTipDates'),
+                                ('Class :','@ClassMCD'),                                
+                                
+                                ]))
+
+p.add_tools(HoverTool(names=['circle2'],tooltips=[('Close :','$y'),
+                                ('Date :','@ToolTipDates'),
+                                ('Class :','@ClassUNH')
+                                
+                                ]))
+
+
+show(p)    
+'''
+
+'''
+Bokeh3
+'''
+'''
+
+from bokeh.models import ColumnDataSource, Plot, LinearAxis, Grid
+from bokeh.models.glyphs import MultiLine
+from bokeh.io import curdoc, show
+
+df = stocklist.reset_index()
+df['Date2'] = pd.to_datetime(df['Date'])
+df['ClassMCD'] = df['og_MCD-kmean']
+df['ClassUNH'] = df['og_UNH-kmean']
+
+df['ToolTipDates'] = df.Date.map(lambda x: x.strftime("%y %b %d")) # Saves work with the tooltip later
+
+
+source = ColumnDataSource(df)
+output_file('d.html')
+p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=800,
+            title="Patterns between Mcdonalds and United Health")
+
+p.multi_line(xs=[[1,2,3],[1,2,3],[3,4,5,6]],
+              ys=[[1,2,3],[4,5,6],[3,4,5,6]],
+              line_color=['red','blue','yellow'], line_width=2)
+show(p)
+
+'''
+
+
+def make_array(df,column,klas,verschil):
+    first=True
+    x=[]
+    y=[]
+    color = []
+    clss = []
+    diff = []
+    for i in range(len(df.index)):
+        
+        row = df.iloc[i,:]
+
+        
+        if first:
+            first = False
+            xMem = []
+            yMem = []
+            clsMem =[]
+            difMem =[]
+            xMem.append(row['Date'])
+            yMem.append(row[column])
+            clsMem.append(row[klas])
+            difMem.append(row[verschil])
+            color.append(row['Color'])
+        
+        if not row['Color'] == color[-1]:
+            x.append(xMem)
+            y.append(yMem)
+            clss.append(clsMem)
+            diff.append(difMem)
+            
+            xMem=[df.iloc[i-1,:]['Date']]
+            yMem=[df.iloc[i-1,:][column]]
+            clsMem=[df.iloc[i-1,:][klas]]
+            difMem=[df.iloc[i-1,:][verschil]]
+                   
+            
+            xMem.append(row['Date'])
+            yMem.append(row[column])
+            clsMem.append(row[klas])
+            difMem.append(row[verschil])
+            color.append(row['Color'])
+        
+        else:
+            xMem.append(row['Date'])
+            yMem.append(row[column])
+            clsMem.append(row[klas])
+            difMem.append(row[verschil])
+            
+    x.append(xMem)
+    y.append(yMem)
+    clss.append(clsMem)
+    diff.append(difMem)
+    return x,y,color,clss,diff
+        
+
+from bokeh.models import HoverTool
+
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource, LinearAxis, Grid
+from bokeh.models.glyphs import MultiLine
+from bokeh.io import curdoc, show
+from bokeh.plotting import figure, show, output_file
+
+df = stocklist.reset_index()
+df['Date2'] = pd.to_datetime(df['Date'])
+df['ClassMCD'] = df['og_MCD-kmean']
+df['ClassUNH'] = df['og_UNH-kmean']
+df['pUNH'] = [x*100 for x in df['Close-UNH']]
+df['pMCD'] = [x*100 for x in df['Close-MCD']]
+
+HoverTool(mode='vline')
+
+df['ToolTipDates'] = df.Date.map(lambda x: x.strftime("%d %b %y")) # Saves work with the tooltip later
+
+mcd = make_array(df,'og_Close-MCD','og_MCD-kmean','Close-MCD')
+unh = make_array(df,'og_Close-UNH','og_UNH-kmean','Close-UNH')
+source2 = ColumnDataSource(df)
+
+source = ColumnDataSource(dict(xsMcd=mcd[0],ysMcd=mcd[1],
+                               xsUnh=unh[0],ysUnh=unh[1],
+                               cMcd=mcd[2],cUnh=unh[2],
+                               classM=mcd[3],classU=unh[3],
+                               diffM=mcd[4],diffU=unh[4]))
+output_file('mcdonalds_unitedhealth.html')
+p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=800,
+            title="Patterns between Mcdonalds and United Health")
+
+p.multi_line(xs='xsMcd',
+              ys='ysMcd',
+              line_join='round',
+              line_color='cMcd', line_width=4,name='mcd',source=source)
+
+p.multi_line(xs='xsUnh',
+              ys='ysUnh',
+              line_join='round',
+              line_color='cUnh', line_width=4,name='unh',source=source)
+
+p.circle(x='Date', y='og_Close-MCD',name='mcdonalds', alpha=0,
+          source=source2,color='Color',size=4)
+p.circle(x='Date', y='og_Close-UNH',name='circle2', alpha=0,
+         source=source2,color='Color',size=4)
+
+
+p.add_tools(HoverTool(names=['mcdonalds'],
+                               
+                                point_policy = "snap_to_data",
+                                mode = 'vline',
+                                tooltips=[
+                                ('Stock : ','McDonalds'),
+                                ('Close :','$y'),
+                                ('Date :','@ToolTipDates'),
+                                ('Class :','@ClassUNH'),
+                                ('Difference :','@pMCD %'),                                
+                                
+                                ]))
+
+p.add_tools(HoverTool(names=['circle2'],
+                      point_policy = "snap_to_data",
+                      mode='vline',
+                      tooltips=[
+                                
+                                ('Stock : ','UnitedHealth'),
+                                ('Close :','$y'),
+                                ('Date :','@ToolTipDates'),
+                                ('Class :','@ClassUNH'),
+                                ('Difference :','@pUNH %')
+                                
+                                
+                                ]))
+#p.add_tools(HoverTool(names=['mcd'],tooltips=[('Value:','$y')]))
+
+
+
+#p.add_tools(HoverTool(names=['unh'],tooltips=[('Value:','$y')]))
+
 
 show(p)
 
-# %%
 
-colordict ={
-    -800: 1,
-    -400: 2,
-    -200: 3,
-    -100: 4,
-}
-stock_list['Color2'] = [colordict2[x] if x in colordict 
-                       else 0 for x in stock_list['MCD-kmean']]
 
-import plotly.express as px
-d = {'col1': list(range(5)), 'col2': list(range(5)),'type':[0,1,1,2,2]}
-df = pd.DataFrame(data=d)
-fig = px.line(df, x='col1', y='col2',color='type')
-fig.show()
 
 # %%
