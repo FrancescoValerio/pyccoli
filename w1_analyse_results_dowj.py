@@ -365,7 +365,7 @@ show(p)
 '''
 
 
-def make_array(df,column,klas,verschil):
+def make_array(df,kleur,column,klas,verschil):
     first=True
     x=[]
     y=[]
@@ -387,9 +387,9 @@ def make_array(df,column,klas,verschil):
             yMem.append(row[column])
             clsMem.append(row[klas])
             difMem.append(row[verschil])
-            color.append(row['Color'])
+            color.append(row[kleur])
         
-        if not row['Color'] == color[-1]:
+        if not row[kleur] == color[-1]:
             x.append(xMem)
             y.append(yMem)
             clss.append(clsMem)
@@ -405,7 +405,7 @@ def make_array(df,column,klas,verschil):
             yMem.append(row[column])
             clsMem.append(row[klas])
             difMem.append(row[verschil])
-            color.append(row['Color'])
+            color.append(row[kleur])
         
         else:
             xMem.append(row['Date'])
@@ -451,11 +451,11 @@ source = ColumnDataSource(dict(xsMcd=mcd[0],ysMcd=mcd[1],
 output_file('mcdonalds_unitedhealth.html')
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=800,
             title="Patterns between Mcdonalds and United Health")
-p.toolbar.logo = None
 
 p.multi_line(xs='xsMcd',
               ys='ysMcd',
               line_join='round',
+              legend='cMcd',
               line_color='cMcd', line_width=4,name='mcd',source=source)
 
 p.multi_line(xs='xsUnh',
