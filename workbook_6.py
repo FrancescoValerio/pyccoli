@@ -62,10 +62,63 @@ ddict = load_dictionary('./output/UNHTRV/UNH_TRV_5y_close.dict')
 
 # Filter out the singletons 
 ct = { k:v for k,v in ddict.items() if (v[1]>1 )}
-ct_df = pd.DataFrame.from_dict(ct,
-        orient='index',columns=['Support',
-        'Length','Time'])
+# Make dataframe (the hard way because pandas is being weird)
+# AKA how i stopped worrying about pandas and just managed my
+# dataframes by hand
+ct_df = pd.DataFrame()
+ct_df['index'] = list(ct.keys())
+ct_df['value'] = list(ct.values())
+ct_df['Support'] = [ct_df.iloc[i,1][0] for i in range(len(ct_df))]
+ct_df['Length'] = [ct_df.iloc[i,1][1] for i in range(len(ct_df))]
+ct_df['Time'] = [ct_df.iloc[i,1][2] for i in range(len(ct_df))]
+del ct_df['value']
+ct_df = ct_df.set_index('index')
+#Now we sort it based on support
+ct_df = ct_df.sort_values('Support')[::-1]
 
+'''
+This gives
 
+index	                Support Length Length_in_time		
+((0, (3,)), (1, (3,)))	275	2	1
+((0, (4,)), (1, (4,)))	176	2	1
+((0, (3,)), (1, (4,)))	162	2	1
+((0, (2,)), (1, (2,)))	107	2	1
+((0, (3,)), (1, (2,)))	105	2	1
+((0, (4,)), (1, (5,)))	43	2	1
+((0, (5,)), (1, (4,)))	43	2	1
+((0, (4,)), (1, (2,)))	39	2	1
+((0, (1,)), (1, (2,)))	31	2	1
+((0, (1,)), (1, (1,)))	26	2	1
+((0, (5,)), (1, (5,)))	25	2	1
+((0, (2, 3)), (1, (4,)))	21	3	2
+((0, (2, 4)), (1, (4,)))	20	3	2
+((0, (2, 4)), (1, (4, 4)))	7	4	2
+((0, (5,)), (1, (2, 4)))	4	3	2
+
+where 0 is UNH and 1 is TRV
+The patterns we picked in 5 were
+where 1 is UNH and 6 is TRV
+((1, (1,)), (6, (1,))),
+((1, (2,)), (6, (4,))),
+((1, (5,)), (6, (4,))),
+((1, (3,)), (6, (3, 3)))
+
+This is very strange as ((0, (3,)), (1, (3,)))	
+with its 275 support has been wiped from the table
+That is, until looking into the dicitonary
+it has probably been replaced by
+((1, (3,)), (16, (3,)))
+or ((1, (3,)), (15, (3,))) or one of the other 6
+patterns that in total use UNH with movement 3
+over 800 times, it is then no wonder that there 
+is little space left to allow UNH to 
+come together with traveller as more important
+(i.e. longer) patterns eat up the space that is 
+needed to distinguish UNH. This however shows
+that there is more than one route to rome and
+that not all routes are created equally, order
+does most certainly matter
+'''
 
 # %%
