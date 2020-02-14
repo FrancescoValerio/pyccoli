@@ -1,3 +1,9 @@
+'''
+Main PYCOLLI code
+
+Runs as a script
+'''
+
 #%%
 import pickle
 import multiprocessing as mp
@@ -9,6 +15,7 @@ from mdl import mdl_calc
 
 
 def plus_(args):
+    
     x,st,ct,d,mdl = args
     if mdl_calc(add(x,ct,d),d,st) < mdl:
         return x
@@ -80,7 +87,7 @@ def ditto_min(st,ct,d,cpu=0):
             break
     return ct
 
-def piccolo(  filename = 'mcduhn5y_close'):
+def pyccoli(  filename = 'mcduhn5y_close'):
     output_generation = False
 
     st, d = import_dat(f'./{filename}.dat')
@@ -147,7 +154,8 @@ def piccolo(  filename = 'mcduhn5y_close'):
 
                     
         
-    
+if __name__ == "__main__":
+    pyccoli()
     
     
 # %%

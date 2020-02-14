@@ -113,7 +113,7 @@ def x_st(number,lengthCodeTable):
         number {int} -- support of given pattern
         lengthCodeTable {int} -- support of all patterns
     """                 
-  return -1*log2(number/lengthCodeTable)
+    return -1*log2(number/lengthCodeTable)
 
 def log2(number):
     """Returns log2 of a given number the correct way
@@ -122,10 +122,10 @@ def log2(number):
     Arguments:
         number {int or float} -- number to be log'd
     """
-  if number==0:
-      return 0
-  else:
-      return math.log2(number)
+    if number==0:
+        return 0
+    else:
+        return math.log2(number)
 
 def lu (top,bottom):
     """Gives the log2 of an nCr
@@ -134,10 +134,10 @@ def lu (top,bottom):
         top {int} -- top part of nCr
         bottom {int} -- bottom part of nCr
     """
-  if top<1 and bottom<1:
-      return 0
-  else:
-      return log2(nCr(top,bottom))
+    if top<1 and bottom<1:
+        return 0
+    else:
+        return log2(nCr(top,bottom))
 
 def ln(number):
     """Returns the length of complexity of a given number 
@@ -149,11 +149,11 @@ def ln(number):
     Arguments:
         number {[int]} -- Number to be coded
     """
-  result = 0
-  while number >= 1 :
-          number = log2(number)
-          result += number
-  return result + log2(2.865064)
+    result = 0
+    while number >= 1 :
+            number = log2(number)
+            result += number
+    return result + log2(2.865064)
 
 
 def nCr(n : int, r : int) -> int:
@@ -169,8 +169,8 @@ def nCr(n : int, r : int) -> int:
     Returns:
         int -- amount of combinations
     """
-  r = min(r, n-r)
-  numer = reduce(mul, range(n, n-r, -1), 1)
-  denom = reduce(mul, range(1, r+1), 1)
-  return numer // denom
+    r = min(r, n-r)
+    numer = reduce(mul, range(n, n-r, -1), 1)
+    denom = reduce(mul, range(1, r+1), 1)
+    return numer // denom
 

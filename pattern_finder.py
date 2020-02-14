@@ -1,4 +1,13 @@
 def finder(pattern,dataset):
+    """Return all the index locations of the given pattern
+    
+    Arguments:
+        pattern {tuple} -- Pattern (multi- or uni=variate)
+        dataset {[tuple]} -- Dataset to be searched
+    
+    Returns:
+        list -- Array containing all index locations
+    """
     if not isinstance(dataset,list):
         d= [[x for x in row] for row in dataset]
     else:
@@ -30,6 +39,25 @@ def finder(pattern,dataset):
 
 # %%
 def painter(pattern,dataset,sign=-1):
+    """Painter functions that removes found patterns from dataset
+    
+    Painter function covers first element of pattern with sign
+    and then covers all remaining pattern spots with zero's as
+    zero's are ignored by PYCOLLI they in essence are removed
+    without having to modify the list length in place which would
+    mess with the indexes found by the finder functions
+    
+    Arguments:
+        pattern {tuple} -- see finder
+        dataset {tuple} -- see finder
+    
+    Keyword Arguments:
+        sign {int} -- sign with which to decorate first instance
+         (default: {-1})
+    
+    Returns:
+        [tuple] -- returns modified dataset and amount of points changed
+    """
     if not isinstance(dataset,list):
         d= [[x for x in row] for row in dataset]
     else:
