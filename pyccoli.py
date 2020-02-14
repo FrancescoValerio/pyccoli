@@ -87,7 +87,7 @@ def ditto_min(st,ct,d,cpu=0):
             break
     return ct
 
-def pyccoli(  filename = 'mcduhn5y_close'):
+def pyccoli(  filename = 'test'):
     output_generation = False
 
     st, d = import_dat(f'./{filename}.dat')
@@ -149,14 +149,12 @@ def pyccoli(  filename = 'mcduhn5y_close'):
             mdl = mdl_calc(ct,d,st)
             
             cand = product(ct,used)
+            
+            
         
     
 
                     
-        
-if __name__ == "__main__":
-    pyccoli()
-    
     
 # %%
 

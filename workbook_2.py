@@ -111,7 +111,8 @@ def xyc(df2,date,data,color):
     y=[df2.iloc[0,:][data]]
     c=[df2.iloc[0,:][color]]
 
-    for i,row in df2.iterrows():
+    for row in df2.iterrows():
+        row = row[1]
 
         if not c[-1] == row[color]:
             xs.append(x)

@@ -175,7 +175,7 @@ def index_list(index):
 #aapl=import_csv_to_df('./Data/AAPL.csv')
 
 #%%
-def f1():
+def example1():
     #Example function of how file can be used
     dow =[]
 
@@ -201,5 +201,23 @@ def f1():
     a.to_excel('dowj_5y_close.xlsx')
 
 
+def example2():
+    #United Health (UNH) versus Travellers (TRV) example
+    stocklist = []
+    
+    for x in ('UNH','TRV'):
+        stocklist.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    stocklist = join_dataframes(*stocklist)
+    stocklist = filter_columns(stocklist,'Close')
+    stocklist = remove_NaN_rows(stocklist)
+    
+    a = row_diff(stocklist)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
 
-    # %%
+    
+    export_to_pyccoli(filter_columns(a,'LB'),'UNH_TRV_5y_close')
+    a.to_excel('UNH_TRV_5y_close.xlsx')
+
+        
+#%%

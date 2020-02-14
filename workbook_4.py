@@ -21,13 +21,15 @@ of possibilities
 
 
 
-Now for workbook 4 we will forcefull math UNH and mcdonalds with the 
+Now for workbook 4 we will forcefull match UNH and mcdonalds with the 
 following patterns:
 
 
 ((1, (4,)), (2, (4,)))
 ((1, (4,)), (2, (3,)))
 ((1, (2,)), (2, (4,)))
+
+#These are not tested but are interesting
 ((1, (2,)), (2, (3,))) [missing but theres child pattern]
 ((1, (2,)), (2, (2,))) [missing but theres child pattern]
 ((1, (3,)), (2, (4,))) [missing but theres child pattern]
@@ -56,6 +58,7 @@ ct = { k:v for k,v in d.items() if v[1]>1}
 ct_df = pd.DataFrame.from_dict(ct,
         orient='index',columns=['Support',
         'Length','Time'])
+
 
 #%%
 st, d = import_dat('./output/dowj_5y_close.dat')
@@ -115,8 +118,8 @@ def xyc(df2,date,data,color):
     y=[df2.iloc[0,:][data]]
     c=[df2.iloc[0,:][color]]
 
-    for i,row in df2.iterrows():
-
+    for row in df2.iterrows():
+        row = row[1]
         if not c[-1] == row[color]:
             xs.append(x)
             ys.append(y)
