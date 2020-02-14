@@ -2,6 +2,15 @@
 from pattern_finder import finder
 
 def rem(pattern,codetable):
+    """Returns copy of codetable without the given pattern
+    
+    Arguments:
+        pattern {tuple} -- Tuple of tuples representing pattern
+        codetable {dict} -- Dictionary containing all patterns
+    
+    Returns:
+        dict -- Copy of dictionary without given pattern
+    """
     
     ct = codetable.copy()
     
@@ -10,6 +19,16 @@ def rem(pattern,codetable):
     return ct
 
 def add(pattern,codetable,dataset):
+    """Returns copy of codetable with the given pattern adde
+    
+    Arguments:
+        pattern {tuple} -- Tuple of tuples representing the pattern
+        codetable {dict} -- Dictionary containing all patterns
+        dataset {tuple} -- tuple of tuples containing the dataset
+    
+    Returns:
+        dict -- Copy of dictionary with the given pattern added
+    """
     
     ct = codetable.copy()
     len_p = 0
