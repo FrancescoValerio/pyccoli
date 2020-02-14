@@ -13,7 +13,7 @@ def import_dat(file: str):
     """Import a .dat file and return a singleton table and the dataset
     
     Arguments:
-        file {[string]} -- [location of .dat file]
+        file {[string]} -- location of .dat file
     """
     dataset = []
     with open(file,'r') as dat_file:
@@ -34,8 +34,23 @@ def import_dat(file: str):
         singleton_table[key] = (singleton_table[key],1,1)
     return singleton_table, dataset
             
-#Unused code
+#Unused code, bugs out on certain styles of dataset
 def candidates(dataset):
+    """Generate first generation of candidates
+    
+    The manual generation of candidates gives a smaller set of 
+    candidates than the cartesian product of the singletons
+    thus this method speeds up the first generation of pycolli
+    significantly, however, it does require a database to be 
+    rectangular, which pycolli doesn't require. As such it is
+    not implemented.
+    
+    Arguments:
+        dataset {[tuple]} -- dataset in the form of ((1,2,3,4),)
+    
+    Returns:
+        [list] -- list of all candidates
+    """
     cand = []
     for x in range(len(dataset[0])):
         for y in range(len(dataset)):
