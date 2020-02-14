@@ -11,8 +11,18 @@ from collections import OrderedDict, Counter
 from pattern_finder import painter
 
 # %%
-def cover(codetable,dataset):    
+def cover(codetable,dataset):  
+    """
+    Given a codetable and dataset, return the covered version
+    of the dataset with a codetable containing every pattern
+    and singleton usage
     
+    
+    Arguments:
+        codetable {[dict]} -- codetable to be covered
+        dataset {[tuple]} -- dataset to be covered
+    
+    """
     # Create separate dictionary for the patterns
     patterns = {}
     d = dataset
@@ -67,14 +77,15 @@ def cover(codetable,dataset):
 
 def cov_order(codetable):
     """
-    Take a codetable and return it in order, time,length,support [desc]
+    Take a codetable and return it in order, time,length,support 
     
     
     Arguments:
         codetable {[dict]} -- codetable to be ordered
     """
-    #first length in time, then pattern lengt, then support
-    # This is different from DITTO as 
+    # First length in time, then pattern length, then support
+    # This is different from DITTO as DITTO does 
+    # first pattern length then support then L(x|st) then  lexico
     return{k: v for k, v in sorted(codetable.items(), 
         key=lambda item:(item[1][2],item[1][1], item[1][0]),
         reverse = True) }
