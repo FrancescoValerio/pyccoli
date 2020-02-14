@@ -176,6 +176,7 @@ def index_list(index):
 
 #%%
 def f1():
+    #Example function of how file can be used
     dow =[]
 
     for x in index_list('dowj'):
