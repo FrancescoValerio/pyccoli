@@ -27,4 +27,13 @@ from 5 and 6 to see the difference
 workbook 7
 is this also the case with United health and Mcdonalds?
 that when taken from the dowjones instead of when taken just
-together you get different patterns?
+together you get different patterns? Yes
+
+workbook 8 
+Shell and BP
+
+workbook 9
+Coca cola and Pepsi
+
+workbook 10 
+Bitcoin

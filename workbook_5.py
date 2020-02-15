@@ -4,9 +4,8 @@
 """
 
 We run UNH vs TRV to see if there is a difference between 
-running them inside or outside of the DOWJ, previous work
-between UNH and McDnalds showed that this was not the case
-how will the results between UNH TRV fare up
+running them inside or outside of the DOWJ, there does seem to be a 
+difference
 
 """
 
