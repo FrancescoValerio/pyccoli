@@ -84,7 +84,7 @@ config = {
  'None':'#f1f1f1'}
 
 
-config = { 
+config2 = { 
           #Red
           ((20, (4,)), (27, (2,))):'red', 
           #Orange

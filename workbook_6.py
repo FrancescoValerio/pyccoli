@@ -26,7 +26,8 @@ d_og = d
 
 ct = st.copy()
 
-#this gives % coverage of line 0 and 1
+#this gives 60% coverage of line 0 and 1
+#old patterns
 ct = add(((0, (3,)), (1, (3,))),ct,d)
 ct = add(((0, (4,)), (1, (4,))),ct,d)
 ct = add(((0, (3,)), (1, (4,))),ct,d)
@@ -84,7 +85,7 @@ config = {
           #Cyan blue
           ((0, (5,)), (1, (4,))):'deepskyblue',
           #Red
-          ((0, (3,)), (1, (3,))):'deepskyblue',
+          ((0, (3,)), (1, (3,3))):'deepskyblue',
                    
  'None':'#f1f1f1'}
 # %%

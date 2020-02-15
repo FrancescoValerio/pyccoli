@@ -1,11 +1,18 @@
 workbook 1
-Apple stock data analysis
+Apple stock data analysis shows that the stock
+can actually give information about itself. 
+Not only are the low and high tied together
+(which makes sense to a degree) but volume is
+also filled with patterns. Interestingly
+you'd assume the variance between low and high price
+to not be this stable in variablility however it 
+only needds 4 patterns to describe it for over 66%
 
 workbook 2
 Dowjones and exxon mobile
 
 workbook 3
-United Health and Mcdonalds
+United Health and Mcdonalds (from the dowjones data)
 
 workbook 4
 United Health compared with Travellers from the index data
@@ -15,4 +22,9 @@ United Health compared with Travellers from their own data
 
 workbook 6
 United Health compared with Travellers combining the patterns 
-from 6 and 5
+from 5 and 6 to see the difference
+
+workbook 7
+is this also the case with United health and Mcdonalds?
+that when taken from the dowjones instead of when taken just
+together you get different patterns?
