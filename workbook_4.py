@@ -1,42 +1,18 @@
-'''
+"""
+    With the expectation that similair stocks
+    will behave alike, we analyze United Health
+    Group and the travelers companyt, as they are both DowJones
+    components and we expect them to behave the 
+    same as they are both insurance companies
+    
+    United Health Group has the symbol UNH
+    travelers comapny has the marking TRV
+    
+    Thus they occupy spot 1 and 6 in the dataset 
+    respectively
+"""
 
-Observation, most stocks within the dowj jones index seem to flow 
-together, that is what can not only be seen from the top patterns
-but also further down. Stocks seem to all head in one way, regardless
-of their industry (for most of the time). They also seem to either
-contribute or be pushed by movements in the dow jones
-
-This all seems obvious but machine learning arriving at this 
-by itself is no trivial conclusion
-
-Further note, the proning straight after expanding may be great 
-for computations but most likely severly impacts findings patterns
-take the pattern ((1, (4,)), (2, (4,))) and 
-((1, (4,)), (2, (4,)),(3, (4,))) if the former start taking too much 
-space due to inclusion of the lattern there still may be new combinations
-further down the road that only fit the ((1, (4,)), (2, (4,))) 
-and not the 3 part. In essence, pruning so early forces the algorithm 
-to always head down branches rather than to explore the whole tree
-of possibilities
-
-
-
-Now for workbook 4 we will forcefull match UNH and mcdonalds with the 
-following patterns:
-
-
-((1, (4,)), (2, (4,)))
-((1, (4,)), (2, (3,)))
-((1, (2,)), (2, (4,)))
-
-#These are not tested but are interesting
-((1, (2,)), (2, (3,))) [missing but theres child pattern]
-((1, (2,)), (2, (2,))) [missing but theres child pattern]
-((1, (3,)), (2, (4,))) [missing but theres child pattern]
-#Summaries of these patterns, when UNH does well so does McDonalds
-
-((1, (4,)), (2, (4,)), (12, (4,)), (27, (4,))) [58]
-'''
+#Imports 
 #%%
 import numpy as np
 import pandas as pd
@@ -50,67 +26,92 @@ from add_rem import add
 from cover import cov_order
 from import_data import import_dat
 from output_gen import load_dictionary, painter
+from pattern_finder import finder
 
 #%%
+# First we load out dictionary to get the 
+# results from PYCOLLI
 
-d = load_dictionary('./output/dowj_5y_close.dict')
-ct = { k:v for k,v in d.items() if v[1]>1}
-ct_df = pd.DataFrame.from_dict(ct,
-        orient='index',columns=['Support',
-        'Length','Time'])
+ddict = load_dictionary('./output/dowj_5y_close.dict')
 
+# Filter out the singletons 
+ct = { k:v for k,v in ddict.items() if (v[1]>1 )}
 
-#%%
+#add the column values to the dictionary
+for key in ct:
+    rr =[]
+    for i in key:
+        rr.append(i[0])
+    ct[key] = (ct[key],rr)
+
+#Filter out all non-travelers and unh stock
+patterns = []
+for k,v in ct.items():
+    if (1 in v[1]) and (6 in v[1]):
+        patterns.append(k)
+
+#We print our findings
+''' omitted for cleanliness
+for x in patterns:
+    print(x)
+    print(ddict[x])
+'''
+
+'''
+Looking for patterns given that we only care about 1 
+and 6, that is United Health and Travelrs respectively
+we cut out the excess fat from patterns
+
+((1, (1,)), (6, (1,)), (9, (1,)), (12, (1,)))
+((1, (2,)), (6, (4,)), (26, (4, 3)))
+((1, (5,)), (6, (4,)), (13, (3,)), (21, (3, 3)))
+((1, (3,)), (2, (2,)), (6, (3, 3)), (14, (3,)), (19, (4,)))
+
+giving
+
+'''
+patterns = [
+((1, (1,)), (6, (1,))),
+((1, (2,)), (6, (4,))),
+((1, (5,)), (6, (4,))),
+((1, (3,)), (6, (3, 3)))]
+
+# We then count how often these appear in our database
+# first we must import the database.
 st, d = import_dat('./output/dowj_5y_close.dat')
-#%%
-d_og = d
 
-ct = st.copy()
+'''
+Then we check how often each one is found in a list of length 1500
 
-#this gives 66% coverage of line 1 and 3`
-ct = add(((1, (4,)), (2, (2,))),ct,d)
-ct = add(((1, (3,)), (2, (3,))),ct,d)
-ct = add(((1, (3,)), (2, (2,))),ct,d)
+for pattern in patterns:
+    print(pattern)
+    print(len(finder(pattern,d)))
 
-
-patterns = {}
-for key, value in ct.items():
-    if value[1]>1:
-        patterns[key]=value
-
-ordered_p = cov_order(patterns)
-
-val_d ={}
-sign = -100
-for x in ordered_p:
-    # 'Paint' the dataset with 0's where covered and return p amount
-    d = painter(x,d,sign)
-    val_d[sign] = x
-
-    sign *= 2
-d2 = [[val_d[x] if x in val_d else 'None' for x in row]for row in d]
-df2 = pd.read_excel('./output/dowj_5y_close.xlsx')
-df2['Date'] = pd.to_datetime(df2['Date'])
-df2['ToolTipDates'] = df2.Date.map(lambda x: x.strftime("%d %b %y"))
-df2['dowjclose'] = list(pd.read_csv('./Stocks/MCD.csv').iloc[-1500:,:]['Close'])
-df2['XOMclose'] = list(pd.read_csv('./Stocks/UNH.csv').iloc[-1500:,:]['Close'])
-df2['patterns'] = d2[2]
+This gives:
 
 
-config = { 
-          #Red
-          ((1, (4,)), (2, (2,))):'crimson', 
-          #Orange
-          #Cyan blue
-          ((1, (3,)), (2, (3,))):'lawngreen',
-          #Red
-          ((1, (3,)), (2, (2,))):'deepskyblue',
- 'None':'gainsboro'}
+> for pattern in patterns:
+>    print(pattern)
+>    print(len(finder(pattern,d)))
 
-df2['colors'] = [config[x] for x in d2[2]]
+((1, (1,)), (6, (1,)))
+26
+((1, (2,)), (6, (4,)))
+65
+((1, (5,)), (6, (4,)))
+43
+((1, (3,)), (6, (3, 3)))
+107
 
+which in a dataset of 1500 means 250 is maximally
+covered (ergo ~15%) which is surprising compared to 
+earlier results
 
-# %%
+We graph these results and then will compare them to 
+another result (see workbook 6) where purely travelers versus UNH 
+is mined and then plotted (thus disregarding the DOWJ)
+'''
+
 def xyc(df2,date,data,color):
     xs=[]
     ys=[]
@@ -137,45 +138,104 @@ def xyc(df2,date,data,color):
     ys.append(y)
     return xs,ys,c
 
+# %%
+#We now do the usual for making a graph
+d_og = d
+
+ct = st.copy()
+
+#this gives 16% coverage of line 1 
+# and 23% of line 6`
+ct = add(((1, (1,)), (6, (1,))),ct,d)
+ct = add(((1, (2,)), (6, (4,))),ct,d)
+ct = add(((1, (5,)), (6, (4,))),ct,d)
+ct = add(((1, (3,)), (6, (3,3))),ct,d)
 
 
-dowj = xyc(df2,'Date','dowjclose','colors')
-xom = xyc(df2,'Date','XOMclose','colors')
-df2['labdowj']= df2['Close-MCD_-LB']
-df2['labXOM']= df2['Close-UNH_-LB']
+
+patterns = {}
+for key, value in ct.items():
+    if value[1]>1:
+        patterns[key]=value
+
+ordered_p = cov_order(patterns)
+
+val_d ={}
+sign = -100
+for x in ordered_p:
+    # 'Paint' the dataset with 0's where covered and return p amount
+    d = painter(x,d,sign)
+    val_d[sign] = x
+    sign *= 2
+
+# ! you need to set this to the row your pattern pertains to
+reference_column_database = 1
+d2 = [[val_d[x] if x in val_d else 'None' for x in row]for row in d]
+df2 = pd.read_excel('./output/dowj_5y_close.xlsx')
+df2['Date'] = pd.to_datetime(df2['Date'])
+df2['ToolTipDates'] = df2.Date.map(lambda x: x.strftime("%d %b %y"))
+df2['UNHclose'] = list(pd.read_csv('./Stocks/UNH.csv').iloc[-1500:,:]['Close'])
+df2['TRVclose'] = list(pd.read_csv('./Stocks/TRV.csv').iloc[-1500:,:]['Close'])
+df2['patterns'] = d2[reference_column_database]
+df2['patterns2'] = d2[6]
+
+
+config = { 
+          #Red
+          ((1, (1,)), (6, (1,))):'crimson', 
+          #Orange
+          ((1, (2,)), (6, (4,))):'gold', 
+          #Cyan blue
+          ((1, (5,)), (6, (4,))):'lawngreen',
+          #Red
+          ((1, (3,)), (6, (3,3))):'deepskyblue',
+ 'None':'#f1f1f1'}
+
+df2['colors'] = [config[x] for x in d2[reference_column_database]]
+df2['colors2'] = [config[x] for x in d2[6]]
+
+
+
+unh = xyc(df2,'Date','UNHclose','colors')
+trv = xyc(df2,'Date','TRVclose','colors2')
+df2['labTRV']= df2['Close-TRV_-LB']
+df2['labUNH']= df2['Close-UNH_-LB']
 df2['patstr']= [ str(x) for x in df2['patterns']]
 source2 = ColumnDataSource(df2)
 
 
 
-output_file('McDonalds_UNH.html')
+output_file('UnitedHealth_Travellers.html')
+
+
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="United Health, McDonalds (3 patterns)")
+            title="United Health, Travellers (4 patterns)")
 
 
-p.circle(x='Date', y='dowjclose',name='dowj', alpha=0,
+p.circle(x='Date', y='TRVclose',name='trv', alpha=0,
          source=source2,size=3)
+
+
+p.circle(x='Date', y='UNHclose',name='unh', alpha=0,
+         source=source2,size=3,color='colors')
 
 
 p.multi_line(name='bill',
-             xs=xom[0],
-             ys=xom[1],
-             color=xom[2],
+             xs=unh[0],
+             ys=unh[1],
+             color=unh[2],
              line_width=3)
 
 p.multi_line(name='steve',
-             xs=dowj[0], 
-             ys=dowj[1],
-             color=dowj[2],
+             xs=trv[0], 
+             ys=trv[1],
+             color=trv[2],
              line_width=3)
 
-p.circle(x='Date', y='XOMclose',name='xom', alpha=0,
-         source=source2,size=3)
 
-
-p.add_tools(HoverTool(names=['dowj'],
+p.add_tools(HoverTool(names=['unh'],
                       mode = "vline",
                       line_policy='nearest',
                       point_policy='snap_to_data',
@@ -183,7 +243,7 @@ p.add_tools(HoverTool(names=['dowj'],
 
                                 ]))
 
-p.add_tools(HoverTool(names=['xom'],
+p.add_tools(HoverTool(names=['trv'],
                       mode = "vline",
                       line_policy='nearest',
                       point_policy='snap_to_data',
@@ -191,17 +251,18 @@ p.add_tools(HoverTool(names=['xom'],
                                 ('Date : ','@ToolTipDates'),
 
                                 
-                                ('Close United Health : ','@XOMclose'),
-                                ('Close McDonalds : ','@dowjclose'),
+                                ('Close United Health : ','@UNHclose'),
+                                ('Close Travelers : ','@TRVclose'),
 
-                                ('Label United Health : ','@labXOM'),
-                                ('Label McDonalds : ','@labdowj'),
+                                ('Label United Health : ','@labUNH'),
+                                ('Label Travelers : ','@labTRV'),
 
                                 ('Pattern : ','@patstr')
 
 
 
                                 ]))
+
 
 p.toolbar.logo = None
 

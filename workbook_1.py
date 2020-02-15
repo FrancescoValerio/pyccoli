@@ -1,99 +1,51 @@
-#%%
 
-'''
-#? Code used to generate this output was:
-
-
-
-dow =[]
-
-for x in index_list('dowj'):
-    
-    if x in ('V','GS','DOW'):
-        continue
-    
-    dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
-dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
-dow = join_dataframes(*dow)
-
-#dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
-dow = filter_columns(dow,'Close')
-dow = remove_NaN_rows(dow)
-a = row_diff(dow)
-a = a.iloc[-1500:,:]
-a = kmean_columns(a,5)
-#a = filter_columns(a,'LB')
-
-export_to_pyccoli(filter_columns(a,'LB'),'dowj_5y_close')
-a.to_excel('dowj_5y_close.xlsx')
-
-
-'''
-
-'''
-#! Analysis of 1500 days of Dow Jones data
-
-Data has been drawn from the 10th of September 2013
-until august 23 2019.
-'''
 #%%
 import numpy as np
 import pandas as pd
-from output_gen import load_dictionary
+from bokeh.io import curdoc, show
+from bokeh.layouts import column
+from bokeh.models import ColumnDataSource, Grid, HoverTool, LinearAxis, Range1d
+from bokeh.models.glyphs import MultiLine
+from bokeh.plotting import figure, output_file, show
 
-
-'''
-
-Within the stocks interestingly enough the
-stocks Mcdonalds and United 
-Health Group patternize together. 
-
-Taking those 4 patterns, you can link 1/3 of every 
-trading day based on the movement of Mcdonalds 
-versus United Health Group. Why?
-
-
-Google provides no free lunch, so time to 
-investigate. For our missing third variable.
-
-First option. They are part of same index so they
-move together.
-
-No, they move different directions within spot
-1, 2 and 6 only within 10 are they both going 
-both the same direction and even in that case
-it is down and not up. You could make an argument
-that some institutional investor is going so
-long on the DOWJ index that it pulls them both
-up, but that they short it the DOW so hard that
-it pulls it down is very very unlikely.
-The risk would simply be far too large.
-
-Second option. Mcdonalds buys their insurance
-ar UNH. Nope, McDonalds gets their insurance
-from Blue Cross Blue Shield Association members
-who are competitors from UNH.
-
-Perhaps both measures relate to american health 
-numbers?
-
-We plot the data we have for more insight
-'''
-#%%
-from import_data import import_dat
 from add_rem import add
 from cover import cov_order
-from output_gen import painter
+from import_data import import_dat
+from output_gen import load_dictionary, painter
 
-st, d = import_dat('./output/dowj_5y_close.dat')
+d = load_dictionary('./output/AAPL_5y_comp.dict')
+ct = { k:v for k,v in d.items() if v[1]>1}
+ct_df = pd.DataFrame.from_dict(ct,
+        orient='index',columns=['Support',
+        'Length','Time'])
+
+
+ct_df.sort_values('Support')[::-1][:10]
+
+st, d = import_dat('./output/AAPL_5y_comp.dat')
 d_og = d
 
 ct = st.copy()
-ct = add(((1, (2,)), (2, (3,))),ct,d)
-ct = add(((1, (3,)), (2, (4,))),ct,d)
-ct = add(((1, (2,)), (2, (4,))),ct,d)
-ct = add(((1, (2,)), (2, (2,))),ct,d)
-#%%
+lijst = list(ct_df.sort_values('Support')[::-1][:20].index)
+#this gives 66% coverage of line 1 and 3`
+ct = add(lijst[0],ct,d)
+ct = add(lijst[1],ct,d)
+ct = add(lijst[5],ct,d)
+ct = add(lijst[9],ct,d)
+
+#ththese two cover 33% of line 4
+
+# deze dekken 150 meer (dus 10% meer)
+#ct = add(lijst[3],ct,d)
+#ct = add(lijst[6],ct,d)
+
+#deze zijn natuurlijk veel interessanter en dekken 30 ipv 40 procent
+ct = add(lijst[13],ct,d)
+ct = add(lijst[17],ct,d)
+
+
+
+
 patterns = {}
 for key, value in ct.items():
     if value[1]>1:
@@ -101,215 +53,227 @@ for key, value in ct.items():
 
 ordered_p = cov_order(patterns)
 
+val_d ={}
 sign = -100
 for x in ordered_p:
     # 'Paint' the dataset with 0's where covered and return p amount
     d = painter(x,d,sign)
+    val_d[sign] = x
+
     sign *= 2
-    
-d= d[1:3]
-'''
-The first and second row of the dataset have now been 
-marked and extracted, the patterns explain 1024 of the 
-1499 points, thus more than two thirds.
 
-Just the first pattern alone explains almost 1/3 of the data
-so what is this pattern and when does it occur
+d2 = [[val_d[x] if x in val_d else 'None' for x in row]for row in d]
 
-To get an idea as to what it does to our time series we append
-it to the excel file used
-'''
-#%%
-#We make sure that the data is correct
-
-from input_gen import import_csv_to_df, join_dataframes
-from input_gen import filter_columns, remove_NaN_rows
-from input_gen import row_diff
-
-
-imported_excel = pd.read_excel('./output/dowj_5y_close.xlsx',
-                               index_col=0).iloc[1:,1:3]
-
-import_stocklist = []
-for x in ('UNH','MCD'):
-    import_stocklist.append(import_csv_to_df(f'./Stocks/{x}.csv'))
-stocklist = join_dataframes(*import_stocklist)
-stocklist = remove_NaN_rows(stocklist)
-stocklist = stocklist.iloc[-1500:,:]
-
-stocklist = filter_columns(stocklist,'Close')
-stocklist_backup = stocklist.copy()
-stocklist =row_diff(stocklist)
-stocklist['UNH-kmean'] = d[0][1:]
-stocklist['MCD-kmean'] = d[1][1:]
-stocklist['og_UNH-kmean'] = d_og[1][1:]
-stocklist['og_MCD-kmean'] = d_og[2][1:]
-stocklist['og_Close-UNH'] = stocklist_backup['Close-UNH']
-stocklist['og_Close-MCD'] = stocklist_backup['Close-MCD']
-
+df2 = pd.read_csv('./Stocks/AAPL.csv').iloc[-1500:,:]
+for i,x in enumerate(['Open','High','Low','Close']):
+    df2[f'{x}Dif'] = df2[x].pct_change()
+df2 = df2.iloc[1:,:]
 
 #%%
-    
+for i,x in enumerate(['OpenK','HighK','LowK','CloseK','VolumeK']):
+    df2[f'{x}']=d_og[i]
+    df2[f'{x}Named']=d2[i]
+df2['Date'] = pd.to_datetime(df2['Date'])
 
-colordict ={
-    #blue
-    -800: '#00FFFF',
-    #these need to be brighter
-    #orange
-    -400: '#ffc87c',
-    #Green
-    -200: '#2ca02c',
-    #red
-    -100: '#ef2728',
+df2['ToolTipDates'] = df2.Date.map(lambda x: x.strftime("%d %b %y"))
+config2 = { 
+          #Red
+          ((1, (2,)), (2, (2,))):'red', 
+          #Orange
+          ((1, (2,)), (2, (3,))):'red', 
+          #Cyan blue
+          ((1, (2,)), (2, (4,))):'red',
+          #Red
+           ((1, (3,)), (2, (4,))):'red',
+ 'None':'#f1f1f1'}
+
+config = { 
+          #Red
+          ((1, (2,)), (2, (2,))):'crimson', 
+          #Orange
+          ((1, (2,)), (2, (3,))):'gold', 
+          #Cyan blue
+          ((1, (2,)), (2, (4,))):'lawngreen',
+          #Red
+           ((1, (3,)), (2, (4,))):'deepskyblue',
+ 'None':'#f1f1f1'}
+config=config2
+df2['highColor'] = [config[x] for x in df2['HighKNamed'] ]
+df2['highAlpha'] = [0 if x=='Grey' else 1 for x in df2['highColor'] ]
+df2['volCode'] = d2[4]
+
+
+# %%
+def xyc(df2,date,data,color):
+    xs=[]
+    ys=[]
+    x=[df2.iloc[0,:][date]]
+    y=[df2.iloc[0,:][data]]
+    c=[df2.iloc[0,:][color]]
+
+    for row in df2.iterrows():
+        row = row[1]
+
+        if not c[-1] == row[color]:
+            xs.append(x)
+            ys.append(y)
+            
+            c.append(row[color])
+
+            x=[x[-1]]
+            y=[y[-1]]
+
+        y.append(row[data])
+        x.append(row[date])
+
+
+    xs.append(x)
+    ys.append(y)
+    return xs,ys,c
+
+
+
+high = xyc(df2,'Date','High','highColor')
+low = xyc(df2,'Date','Low','highColor')
+
+source2 = ColumnDataSource(df2)
+output_file('test.html')
+
+
+dd2={
+    'None':'gainsboro',
+    ((4, (1, 2, 1)),):'Blue',
+    ((4, (1, 2, 2)),):'Purple'
 }
+df2['volColor']=[dd2[x] for x in df2['volCode']]
+
+vol = xyc(df2,'Date','Volume','volColor')
+           
 
 
-stocklist['Color'] = [colordict[x] if x in colordict 
-                       else '#d9d9d9' for x in stocklist['MCD-kmean']]
+#%%
+#! FIRST RUN W2.PY IN JUPYTHER THEN THIS CODE TO GET GRAPHS
+
+df2 = pd.read_csv('./Stocks/AAPL.csv').iloc[-1500:,:]
+for i,x in enumerate(['Open','High','Low','Close']):
+    df2[f'{x}Dif'] = df2[x].pct_change()
+df2 = df2.iloc[1:,:]
+
+for i,x in enumerate(['OpenK','HighK','LowK','CloseK','VolumeK']):
+    df2[f'{x}']=d_og[i]
+    df2[f'{x}Named']=d2[i]
+df2['Date'] = pd.to_datetime(df2['Date'])
+
+df2['ToolTipDates'] = df2.Date.map(lambda x: x.strftime("%d %b %y"))
+
+config = { 
+          #Red
+          ((1, (2,)), (2, (2,))):'crimson', 
+          #Orange
+          ((1, (2,)), (2, (3,))):'gold', 
+          #Cyan blue
+          ((1, (2,)), (2, (4,))):'lawngreen',
+          #Red
+           ((1, (3,)), (2, (4,))):'deepskyblue',
+ 'None':'gainsboro'}
+df2['highColor'] = [config[x] for x in df2['HighKNamed'] ]
+df2['highAlpha'] = [0 if x=='Grey' else 1 for x in df2['highColor'] ]
+df2['volCode'] = d2[4]
+
+df2['VolumeKNamedstr'] = [str(x) for x in df2['VolumeKNamed']]
+df2['LowKNamedstr']= [str(x) for x in df2['LowKNamed']]
+
+source2 = ColumnDataSource(df2)
+
+output_file('Apple.html')
+
+p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
+            title="Apple Stock (6 patterns)",y_range=[50,250],y_axis_type='linear')
+
+p.circle(x='Date', y='Low',name='low', alpha=0,
+         source=source2,size=3)
+
+p.circle(x='Date', y='High',name='high', alpha=0,
+         source=source2,size=3)
 
 
 
-
-def make_array(df,kleur,column,klas,verschil):
-    first=True
-    x=[]
-    y=[]
-    color = []
-    clss = []
-    diff = []
-    for i in range(len(df.index)):
-        
-        row = df.iloc[i,:]
-
-        
-        if first:
-            first = False
-            xMem = []
-            yMem = []
-            clsMem =[]
-            difMem =[]
-            xMem.append(row['Date'])
-            yMem.append(row[column])
-            clsMem.append(row[klas])
-            difMem.append(row[verschil])
-            color.append(row[kleur])
-        
-        if not row[kleur] == color[-1]:
-            x.append(xMem)
-            y.append(yMem)
-            clss.append(clsMem)
-            diff.append(difMem)
-            
-            xMem=[df.iloc[i-1,:]['Date']]
-            yMem=[df.iloc[i-1,:][column]]
-            clsMem=[df.iloc[i-1,:][klas]]
-            difMem=[df.iloc[i-1,:][verschil]]
-                   
-            
-            xMem.append(row['Date'])
-            yMem.append(row[column])
-            clsMem.append(row[klas])
-            difMem.append(row[verschil])
-            color.append(row[kleur])
-        
-        else:
-            xMem.append(row['Date'])
-            yMem.append(row[column])
-            clsMem.append(row[klas])
-            difMem.append(row[verschil])
-            
-    x.append(xMem)
-    y.append(yMem)
-    clss.append(clsMem)
-    diff.append(difMem)
-    return x,y,color,clss,diff
-        
-
-from bokeh.models import HoverTool
-
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, LinearAxis, Grid
-from bokeh.models.glyphs import MultiLine
-from bokeh.io import curdoc, show
-from bokeh.plotting import figure, show, output_file
-
-df = stocklist.reset_index()
-df['Date2'] = pd.to_datetime(df['Date'])
-df['ClassMCD'] = df['og_MCD-kmean']
-df['ClassUNH'] = df['og_UNH-kmean']
-df['pUNH'] = [x*100 for x in df['Close-UNH']]
-df['pMCD'] = [x*100 for x in df['Close-MCD']]
-
-HoverTool(mode='vline')
-
-df['ToolTipDates'] = df.Date.map(lambda x: x.strftime("%d %b %y")) # Saves work with the tooltip later
-
-mcd = make_array(df,'Color','og_Close-MCD','og_MCD-kmean','Close-MCD')
-unh = make_array(df,'Color','og_Close-UNH','og_UNH-kmean','Close-UNH')
-source2 = ColumnDataSource(df)
-
-source = ColumnDataSource(dict(xsMcd=mcd[0],ysMcd=mcd[1],
-                               xsUnh=unh[0],ysUnh=unh[1],
-                               cMcd=mcd[2],cUnh=unh[2],
-                               classM=mcd[3],classU=unh[3],
-                               diffM=mcd[4],diffU=unh[4]))
-output_file('mcdonalds_unitedhealth.html')
-p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=800,
-            title="Patterns between Mcdonalds and United Health")
-
-p.multi_line(xs='xsMcd',
-              ys='ysMcd',
-              line_join='round',
-              legend='cMcd',
-              line_color='cMcd', line_width=4,name='mcd',source=source)
-
-p.multi_line(xs='xsUnh',
-              ys='ysUnh',
-              line_join='round',
-              line_color='cUnh', line_width=4,name='unh',source=source)
-
-p.circle(x='Date', y='og_Close-MCD',name='mcdonalds', alpha=0,
-          source=source2,color='Color',size=4)
-p.circle(x='Date', y='og_Close-UNH',name='circle2', alpha=0,
-         source=source2,color='Color',size=4)
-
-
-p.add_tools(HoverTool(names=['mcdonalds'],
-                               
-                                point_policy = "snap_to_data",
-                                mode = 'vline',
+p.add_tools(HoverTool(names=['low'],
+                      mode = "vline",
+                      line_policy='nearest',
+                      point_policy='snap_to_data',
                                 tooltips=[
-                                ('Stock : ','McDonalds'),
-                                ('Close :','$y'),
-                                ('Date :','@ToolTipDates'),
-                                ('Class :','@ClassUNH'),
-                                ('Difference :','@pMCD %'),                                
-                                
+
                                 ]))
 
-p.add_tools(HoverTool(names=['circle2'],
-                      point_policy = "snap_to_data",
-                      mode='vline',
-                      tooltips=[
-                                
-                                ('Stock : ','UnitedHealth'),
-                                ('Close :','$y'),
-                                ('Date :','@ToolTipDates'),
-                                ('Class :','@ClassUNH'),
-                                ('Difference :','@pUNH %')
-                                
-                                
+
+
+
+
+high = xyc(df2,'Date','High','highColor')
+low = xyc(df2,'Date','Low','highColor')
+p.multi_line(name='steve',
+             xs=high[0], 
+             ys=high[1],
+             color=high[2],
+             line_width=3)
+
+p.multi_line(name='bill',
+             xs=low[0],
+             ys=low[1],
+             color=low[2],
+             line_width=3)
+df2['volColor']=[dd2[x] for x in df2['volCode']]
+
+q = figure(x_range=p.x_range ,plot_width=1440, plot_height=200,
+            title="Stock Volume",y_axis_type='linear')
+vol = xyc(df2,'Date','Volume','volColor')
+         
+q.multi_line(name='vol',
+             xs=vol[0],
+             ys=vol[1],
+             color=vol[2],
+             line_width=3)
+
+q.circle(x='Date', y='Volume',name='volli', alpha=0,
+         source=source2,size=3)
+
+q.add_tools(HoverTool(names=['volli'],
+                      mode = "vline",
+                      line_policy='nearest',
+                      point_policy='snap_to_data',
+                                tooltips=[
+                                ('Date : ','@ToolTipDates'),
+
+                                ('Volume : ','@Volume'),
+                                ('Volume Class : ','@VolumeK'),
+                                ('Pattern : ','@VolumeKNamedstr')
+
+
+
                                 ]))
-#p.add_tools(HoverTool(names=['mcd'],tooltips=[('Value:','$y')]))
+
+
+p.add_tools(HoverTool(names=['high'],
+                      mode = "vline",
+                      line_policy='nearest',
+                      point_policy='snap_to_data',
+                                tooltips=[
+                                ('Date : ','@ToolTipDates'),
+                                ('High : ','@High'),
+                                ('Low : ','@Low'),
+                                ('High class : ','@HighK'),
+                                ('Low class : ','@LowK'),
+                                
+                                ('Pattern : ','@LowKNamedstr')
 
 
 
-#p.add_tools(HoverTool(names=['unh'],tooltips=[('Value:','$y')]))
+                                ]))
 
 
-show(p)
+q.toolbar.logo = None
+p.toolbar.logo = None
 
-
-
-
+show(column(p,q))
 # %%

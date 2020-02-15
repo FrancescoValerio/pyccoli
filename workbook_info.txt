@@ -1,0 +1,18 @@
+workbook 1
+Apple stock data analysis
+
+workbook 2
+Dowjones and exxon mobile
+
+workbook 3
+United Health and Mcdonalds
+
+workbook 4
+United Health compared with Travellers from the index data
+
+workbook 5
+United Health compared with Travellers from their own data
+
+workbook 6
+United Health compared with Travellers combining the patterns 
+from 6 and 5
