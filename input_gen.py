@@ -237,5 +237,86 @@ def example3():
     
     export_to_pyccoli(filter_columns(a,'LB'),'UNH_MCD_5y_close')
     a.to_excel('UNH_MCD_5y_close.xlsx')
+      
+def example3():
+    #United Health (UNH) versus McDonalds (TRV) example
+    stocklist = []
+    
+    for x in ('UNH','MCD'):
+        stocklist.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    stocklist = join_dataframes(*stocklist)
+    stocklist = filter_columns(stocklist,'Close')
+    stocklist = remove_NaN_rows(stocklist)
+    
+    a = row_diff(stocklist)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
+
+    
+    export_to_pyccoli(filter_columns(a,'LB'),'UNH_MCD_5y_close')
+    a.to_excel('UNH_MCD_5y_close.xlsx')
+
+def example4():
+    #Coca Cola (KO) versus Pepsi (PEP) example
+    stocklist = []
+    
+    for x in ('PEP','KO'):
+        stocklist.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    stocklist = join_dataframes(*stocklist)
+    stocklist = filter_columns(stocklist,'Close')
+    stocklist = remove_NaN_rows(stocklist)
+    
+    a = row_diff(stocklist)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
+
+    
+    export_to_pyccoli(filter_columns(a,'LB'),'PEP_KO_5y_close')
+    a.to_excel('PEP_KO_5y_close.xlsx')
+def example5():
+    #Example function of how file can be used
+    dow =[]
+
+    for x in ('IBM','XOM'):
         
+        
+        dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
+    dow = join_dataframes(*dow)
+
+    #dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
+    dow = filter_columns(dow,'Close')
+    dow = remove_NaN_rows(dow)
+    #%%
+    a = row_diff(dow)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
+    #a = filter_columns(a,'LB')
+
+    export_to_pyccoli(filter_columns(a,'LB'),'ixdow_5y_close')
+    a.to_excel('ixdow_5y_close.xlsx')
+
+def example6():
+    #Example function of how file can be used
+    dow =[]
+
+    for x in ('XOM'):
+        
+        
+        dow.append(import_csv_to_df(f'./Stocks/{x}.csv'))
+    dow.append(import_csv_to_df(f'./Stocks/1ndex_DOW.csv'))
+    dow = join_dataframes(*dow)
+
+    #dow = import_csv_to_df('./AAPL.csv').iloc[-1500:]
+    dow = filter_columns(dow,'Close')
+    dow = remove_NaN_rows(dow)
+    #%%
+    a = row_diff(dow)
+    a = a.iloc[-1500:,:]
+    a = kmean_columns(a,5)
+    #a = filter_columns(a,'LB')
+
+    export_to_pyccoli(filter_columns(a,'LB'),'ixdow_5y_close')
+    a.to_excel('ixdow_5y_close.xlsx')
+
 #%%

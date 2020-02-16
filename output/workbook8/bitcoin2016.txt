@@ -1,0 +1,8 @@
+This is automated documentation for file bitcoin2016
+ the following columns are represented within 
+bitcoin2016.dat 
+0. <OPEN>_-LB
+1. <HIGH>_-LB
+2. <LOW>_-LB
+3. <CLOSE>_-LB
+4. <VOL>_-LB

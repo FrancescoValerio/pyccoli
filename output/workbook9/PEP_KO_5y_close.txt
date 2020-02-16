@@ -1,0 +1,5 @@
+This is automated documentation for file PEP_KO_5y_close
+ the following columns are represented within 
+PEP_KO_5y_close.dat 
+0. Close-PEP_-LB
+1. Close-KO_-LB

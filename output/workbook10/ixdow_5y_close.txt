@@ -1,0 +1,6 @@
+This is automated documentation for file ixdow_5y_close
+ the following columns are represented within 
+ixdow_5y_close.dat 
+0. Close-IBM_-LB
+1. Close-XOM_-LB
+2. Close-1ndex_DOW_-LB

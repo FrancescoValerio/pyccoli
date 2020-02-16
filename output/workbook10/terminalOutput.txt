@@ -1,0 +1,16 @@
+Original MDL:                   16167.858200401231
+After adding codes:             13887.75576719118
+After pruning codes:            13023.495557083064
+After adding codes:             12560.723934601512
+After pruning codes:            12470.179900858904
+After adding codes:             12332.763642636015
+After pruning codes:            12310.226010727596
+After adding codes:             12309.119871596338
+After pruning codes:            12269.951639407183
+After adding codes:             12269.951639407183
+After pruning codes:            12269.353000676492
+After adding codes:             12269.353000676492
+After pruning codes:            12267.305003193775
+After adding codes:             12267.305003193775
+After pruning codes:            12267.305003193775
+Finished

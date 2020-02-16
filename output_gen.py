@@ -67,5 +67,17 @@ def painter(pattern,dataset,sign=-1):
                 d[row[0]][point:point+len(row[1])] = [sign]*len(row[1])
     return d
 #%%
-
-        
+def compare_dictionaries(d1,d2):
+    """Return the patterns two dictionaries have in common
+    
+    Arguments:
+        d1 {dict} -- First dictionary
+        d2 {dict} -- Second dictionary
+    
+    Returns:
+        list -- Intersection of both dictionaries
+    """
+    d1=set(list(d1))
+    d2=set(list(d2))
+    return list(d1.intersection(d2))
+    

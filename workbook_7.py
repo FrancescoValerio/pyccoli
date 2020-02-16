@@ -43,6 +43,46 @@ is used by other patterns when taking the dowjones as a whole
 it would thus be intereseting in future research to let the patterns
 overlap.
 
+
+'''
+
+
+#%%
+from output_gen import load_dictionary, painter, compare_dictionaries
+# We check what patterns overlap
+ddict1_tmp = list(load_dictionary('./output/UNHMCD/UNH_MCD_5y_close.dict'))
+ddict2 = load_dictionary('./output/dowj_5y_close.dict')
+#we need to make the columns equal
+ddict1 =[]
+for x in ddict1_tmp:
+    qq= []
+    for row,pattern in x:
+        qq.append(tuple([row+1,pattern]))
+    ddict1.append(tuple(qq))
+
+
+    
+patterns_in_common = compare_dictionaries(ddict1,ddict2)
+
+"""Output
+
+[((1, (4,)),),
+ ((1, (2,)),),
+ ((2, (3,)),),
+ ((1, (4,)), (2, (4,))),
+ ((2, (1,)),),
+ ((1, (5,)),),
+ ((1, (3,)),),
+ ((2, (2,)),),
+ ((2, (5,)),),
+ ((2, (4,)),),
+ ((1, (1,)),)]
+"""
+
+'''
+The fascinating part is that they only have one pattern in common 
+United Health goes to 4 and then McDonalds also going to for 
+
 For completeness sake we construct a graph with the four top patterns
 
 '''
