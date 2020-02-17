@@ -81,3 +81,30 @@ def compare_dictionaries(d1,d2):
     d2=set(list(d2))
     return list(d1.intersection(d2))
     
+    
+def xyc(df2,date,data,color):
+    xs=[]
+    ys=[]
+    x=[df2.iloc[0,:][date]]
+    y=[df2.iloc[0,:][data]]
+    c=[df2.iloc[0,:][color]]
+
+    for row in df2.iterrows():
+        row = row[1]
+        if not c[-1] == row[color]:
+            xs.append(x)
+            ys.append(y)
+            
+            c.append(row[color])
+
+            x=[x[-1]]
+            y=[y[-1]]
+
+        y.append(row[data])
+        x.append(row[date])
+
+
+    xs.append(x)
+    ys.append(y)
+    return xs,ys,c
+
