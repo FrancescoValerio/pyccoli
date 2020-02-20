@@ -1,5 +1,0 @@
-This is automated documentation for file mcduhn5y_close
- the following columns are represented within 
-mcduhn5y_close.dat 
-2. Close-UNH_-LB
-3. Close-MCD_-LB

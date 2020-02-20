@@ -153,11 +153,3 @@ def pyccoli(  filename = 'test',cpu=32):
             
             
         
-    
-
-                    
-    
-# %%
-
-
-# %%
