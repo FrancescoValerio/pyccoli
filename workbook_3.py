@@ -68,10 +68,12 @@ d_og = d
 ct = st.copy()
 
 #this gives 26% coverage of line 1 and 2`
-ct = add(((1, (4,)), (2, (2,))),ct,d)
-ct = add(((1, (3,)), (2, (3,))),ct,d)
-ct = add(((1, (3,)), (2, (2,))),ct,d)
+ct = add(((1, (4,)), (2, (4,))),ct,d)
+ct = add(((1, (4,)), (2, (3,))),ct,d)
+ct = add(((1, (2,)), (2, (4,))),ct,d)
 
+ct = add(((1, (5, 4)), (2, (4,))),ct,d)
+ct = add(((1, (4,)), (2, (5, 3))),ct,d)
 
 patterns = {}
 for key, value in ct.items():
@@ -92,22 +94,25 @@ d2 = [[val_d[x] if x in val_d else 'None' for x in row]for row in d]
 df2 = pd.read_excel('./output/dowj_5y_close.xlsx')
 df2['Date'] = pd.to_datetime(df2['Date'])
 df2['ToolTipDates'] = df2.Date.map(lambda x: x.strftime("%d %b %y"))
-df2['dowjclose'] = list(pd.read_csv('./Stocks/MCD.csv').iloc[-1500:,:]['Close'])
-df2['XOMclose'] = list(pd.read_csv('./Stocks/UNH.csv').iloc[-1500:,:]['Close'])
-df2['patterns'] = d2[2]
+df2['mcdclose'] = list(pd.read_csv('./Stocks/MCD.csv').iloc[-1500:,:]['Close'])
+df2['UNHclose'] = list(pd.read_csv('./Stocks/UNH.csv').iloc[-1500:,:]['Close'])
+df2['patterns'] = [str(x) for x in d2[2]]
 
 
 config = { 
           #Red
-          ((1, (4,)), (2, (2,))):'crimson', 
-          #Orange
+          ((1, (4,)), (2, (4,))):'crimson', 
           #Cyan blue
-          ((1, (3,)), (2, (3,))):'lawngreen',
+          ((1, (4,)), (2, (3,))):'lawngreen',
           #Red
-          ((1, (3,)), (2, (2,))):'deepskyblue',
+          ((1, (2,)), (2, (4,))):'deepskyblue',
+          ((1, (5, 4)), (2, (4,))):'mediumpurple',
+          ((1, (4,)), (2, (5, 3))):'peachpuff',
+          
  'None':'#f1f1f1'}
 
-df2['colors'] = [config[x] for x in d2[2]]
+df2['colorsMCD'] = [config[x] for x in d2[2]]
+df2['colorsUNH'] = [config[x] for x in d2[1]]
 
 
 # %%
@@ -139,8 +144,8 @@ def xyc(df2,date,data,color):
 
 
 
-dowj = xyc(df2,'Date','dowjclose','colors')
-xom = xyc(df2,'Date','XOMclose','colors')
+dowj = xyc(df2,'Date','mcdclose','colorsMCD')
+xom = xyc(df2,'Date','UNHclose','colorsUNH')
 df2['labdowj']= df2['Close-MCD_-LB']
 df2['labXOM']= df2['Close-UNH_-LB']
 df2['patstr']= [ str(x) for x in df2['patterns']]
@@ -155,7 +160,7 @@ p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
             title="United Health, McDonalds (3 patterns)")
 
 
-p.circle(x='Date', y='dowjclose',name='dowj', alpha=0,
+p.circle(x='Date', y='mcdclose',name='dowj', alpha=0,
          source=source2,size=3)
 
 
@@ -171,7 +176,7 @@ p.multi_line(name='steve',
              color=dowj[2],
              line_width=3)
 
-p.circle(x='Date', y='XOMclose',name='xom', alpha=0,
+p.circle(x='Date', y='UNHclose',name='xom', alpha=0,
          source=source2,size=3)
 
 
@@ -191,8 +196,8 @@ p.add_tools(HoverTool(names=['xom'],
                                 ('Date : ','@ToolTipDates'),
 
                                 
-                                ('Close United Health : ','@XOMclose'),
-                                ('Close McDonalds : ','@dowjclose'),
+                                ('Close United Health : ','@UNHclose'),
+                                ('Close McDonalds : ','@mcdclose'),
 
                                 ('Label United Health : ','@labXOM'),
                                 ('Label McDonalds : ','@labdowj'),
