@@ -100,7 +100,7 @@ config = {
           #Red
           list(ct_df.index)[0]:'crimson', 
           #Orange
-          list(ct_df.index)[2]:'gold', 
+          list(ct_df.index)[2]:'orange', 
           #Cyan blue
           list(ct_df.index)[4]:'lawngreen',
           #Red
@@ -125,7 +125,7 @@ output_file('PEP_KO.html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="Coca-Cola, PepsiCo (3 patterns)")
+            title="Coca-Cola and PepsiCo Closing Price")
 
 p.circle(x='Date', y='PEPclose',name='pep', alpha=0,
          source=source2,size=3)

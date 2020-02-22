@@ -138,8 +138,8 @@ ct = st.copy()
 ct = add(list(ct_df.index)[0],ct,d)
 ct = add(list(ct_df.index)[1],ct,d)
 ct = add(list(ct_df.index)[2],ct,d)
-
-
+ct = add(list(ct_df.index)[3],ct,d)
+ct = add(list(ct_df.index)[4],ct,d)
 patterns = {}
 for key, value in ct.items():
     if value[1]>1:
@@ -177,6 +177,9 @@ config = {
           list(ct_df.index)[1]:'deepskyblue',
           #Red
           list(ct_df.index)[2]:'crimson',
+          list(ct_df.index)[3]:'purple',
+          list(ct_df.index)[4]:'orange',
+
  'None':'#f1f1f1'}
 # %%
 
@@ -229,7 +232,7 @@ output_file('MCD_UNH.html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="United Health, McDonalds (3 patterns)")
+            title="United Health and McDonalds Closing Price")
 
 
 p.circle(x='Date', y='UNHclose',name='unh', alpha=0,

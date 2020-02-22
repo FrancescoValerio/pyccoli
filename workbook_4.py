@@ -184,7 +184,7 @@ config = {
           #Red
           ((1, (1,)), (6, (1,))):'crimson', 
           #Orange
-          ((1, (2,)), (6, (4,))):'gold', 
+          ((1, (2,)), (6, (4,))):'purple', 
           #Cyan blue
           ((1, (5,)), (6, (4,))):'lawngreen',
           #Red
@@ -211,7 +211,7 @@ output_file('UnitedHealth_Travellers.html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="United Health, Travellers (4 patterns)")
+            title="United Health and Travellers Closing Price")
 
 
 p.circle(x='Date', y='TRVclose',name='trv', alpha=0,

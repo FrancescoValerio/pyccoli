@@ -107,7 +107,7 @@ config = {
           #Red
           ((1, (2,)), (2, (4,))):'deepskyblue',
           ((1, (5, 4)), (2, (4,))):'mediumpurple',
-          ((1, (4,)), (2, (5, 3))):'peachpuff',
+          ((1, (4,)), (2, (5, 3))):'orange',
           
  'None':'#f1f1f1'}
 
@@ -157,7 +157,7 @@ output_file('McDonalds_UNH.html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="United Health, McDonalds (3 patterns)")
+            title="United Health and McDonalds Closing Price")
 
 
 p.circle(x='Date', y='mcdclose',name='dowj', alpha=0,

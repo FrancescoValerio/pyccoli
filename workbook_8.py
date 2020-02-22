@@ -121,7 +121,7 @@ output_file('bitcoindaily.html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="Bitcoin daily 2016-2020")
+            title="Bitcoin Stock Price")
 
 
 p.circle(x='Date', y='og<OPEN>',name='open', alpha=0,
