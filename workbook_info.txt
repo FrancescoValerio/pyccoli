@@ -41,4 +41,4 @@ IBM
 exxon
 
 workbook 11 
-Bitcoin
+Bitcoin hourly
