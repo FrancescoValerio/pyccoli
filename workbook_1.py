@@ -188,7 +188,7 @@ source2 = ColumnDataSource(df2)
 output_file('Apple.html')
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="Apple Stock (6 patterns)",y_range=[50,250],y_axis_type='linear')
+            title="Apple Stock Price",y_range=[50,250],y_axis_type='linear')
 
 p.circle(x='Date', y='Low',name='low', alpha=0,
          source=source2,size=3)
