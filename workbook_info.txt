@@ -29,22 +29,16 @@ is this also the case with United health and Mcdonalds?
 that when taken from the dowjones instead of when taken just
 together you get different patterns? Yes
 
-workbook 8 [Not graphed]
+workbook 8 
 Bitcoin
 
-workbook 9 [Not graphed]
+workbook 9 
 Coca cola and Pepsi
 
-workbook 10 [Not graphed]
+workbook 10 
 index_DOW 
 IBM
 exxon
 
-workbook 10 [Not graphed]
-index_DOW 
-IBM
-exxon
-
-
-workbook 12 [Not graphed]
+workbook 11 
 Bitcoin
