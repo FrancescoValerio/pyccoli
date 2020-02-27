@@ -83,6 +83,18 @@ def compare_dictionaries(d1,d2):
     
     
 def xyc(df2,date,data,color):
+    """Helper function for making graphs using Bokeh multi-line
+    
+    Arguments:
+        df2 {np.array} -- dataframe to be used for graph
+        date {string} -- Name of the column containing the date
+        
+        data {sting} -- Name of col of to be plotted data
+        color {string} -- name of col with what color data should be
+    
+    Returns:
+        tuple -- multiline compatible tuple
+    """
     xs=[]
     ys=[]
     x=[df2.iloc[0,:][date]]
@@ -108,3 +120,4 @@ def xyc(df2,date,data,color):
     ys.append(y)
     return xs,ys,c
 
+def 
