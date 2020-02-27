@@ -4,6 +4,8 @@ from pattern_finder import finder
 '''
 Some functions to help with output generations
 '''
+
+
 def load_dictionary(file):
     """Loads a dictionary file 
     
@@ -145,6 +147,21 @@ from cover import cov_order
 
 
 def create_codetables(data,codetable):
+    """Creates the same codetable as produced by the cover algorithm
+    
+    This function can be used to get an idea of the actual support
+    of a pattern within the codetable, as otherwise the patterns 
+    is solelty the independent amount of times it appears within the
+    dataset, not excluding cases when there is overlap with another
+     pattern
+    
+    Arguments:
+        data {[type]} -- [description]
+        codetable {[type]} -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
 
     st, d = import_dat(data)
     codetable = load_dictionary(codetable)
