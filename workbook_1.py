@@ -11,12 +11,7 @@ from bokeh.plotting import figure, output_file, show
 from add_rem import add
 from cover import cov_order
 from import_data import import_dat
-from output_gen import load_dictionary, painter,create_codetables, write_dict
-
-orict,covct = create_codetables('./output/AAPL_5y_comp.dat','./output/AAPL_5y_comp.dict')
-write_df(orict, 'original_apple_codetable')
-write_df(covct, 'covered_apple_codetable')
-
+from output_gen import load_dictionary, painter,create_codetables, write_df
 #%%
 d = load_dictionary('./output/AAPL_5y_comp.dict')
 ct = { k:v for k,v in d.items() if v[1]>1}

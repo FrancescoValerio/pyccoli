@@ -42,8 +42,7 @@ def write_df(df, file):
         file {str} -- desired location of output
     """
     with open(f'{file}.txt','w') as out:
-        for k,v in d.iterrows():
-            print(f'{k}\t\t\t{v}', file=out)
+        print(df.to_string(max_colwidth=2000), file=out)
             
              
 def painter(pattern,dataset,sign=-1):
