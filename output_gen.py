@@ -32,7 +32,20 @@ def write_dict(d, file):
     with open(f'{file}.txt','w') as out:
         for k,v in d.items():
             print(f'{k}\t\t\t{v}', file=out)
+
+def write_df(df, file): 
+    """Write a Dataframe file to a text file
     
+   
+    Arguments:
+        df {Dataframe} -- dataframe file to be used as output
+        file {str} -- desired location of output
+    """
+    with open(f'{file}.txt','w') as out:
+        for k,v in d.iterrows():
+            print(f'{k}\t\t\t{v}', file=out)
+            
+             
 def painter(pattern,dataset,sign=-1):
     """Custom painter function 
     
@@ -120,4 +133,76 @@ def xyc(df2,date,data,color):
     ys.append(y)
     return xs,ys,c
 
-def 
+import pandas as pd
+from import_data import import_dat
+from collections import OrderedDict, Counter
+from pattern_finder import painter
+from cover import cov_order
+
+
+
+#data = './output/AAPL_5y_comp.dat'
+#codetable = './output/AAPL_5y_comp.dict'
+
+
+def create_codetables(data,codetable):
+
+    st, d = import_dat(data)
+    codetable = load_dictionary(codetable)
+
+
+
+    # Create separate dictionary for the patterns
+    patterns = {}
+
+    # Add all patterns from the codetable to the pattern dictionary
+    for key, value in codetable.items():
+        if value[1]>1:
+            patterns[key]=value
+
+    # Order the patterns dictionary
+    c_ord_patterns = cov_order(patterns)
+
+    # Initialize a counter dictionary
+    c = Counter()
+
+    # For patterns in order, go over the dataset
+    for x in c_ord_patterns:
+        # 'Paint' the dataset with 0's where covered and return p amount
+        d,num = painter(x,d)
+        # Use pattern amount for value, and pattern for key, for dict
+        c[x] = num
+        
+    # Once all patterns have covered the dataset
+    # Go over the covered dataset element by element and count
+    #  how often an element appears
+    for i, row in enumerate(d):
+        for element in row:
+            if element > 0:
+                c[((i,(element,)),)] += 1
+            
+    for x in codetable:
+        # If it doesn't exist in the covered codetable, add it
+        if not x in c:
+            #(support,total_length_pattern,timespan_of_pattern )
+
+            c[x] = (0,codetable[x][1],codetable[x][2])
+        #Otherwise just add the length and timespan of the patterns
+        else:
+            #(support,total_length_pattern,timespan_of_pattern )
+
+            c[x] = (c[x] ,codetable[x][1],codetable[x][2])
+
+    # C is now our covered codetable and codetable is the original
+    '''
+    This can be tested by checking the difference between 
+    codetable[((0,(2,)),)]
+    and
+    c[((0,(2,)),)]
+    '''
+    original_ct = pd.DataFrame.from_dict(codetable, orient='index'
+                , columns=['support','length','time']).sort_values(
+                    'support')[::-1]
+    covered_ct = pd.DataFrame.from_dict(c, orient='index', columns=[
+        'support','length','time']).sort_values('support')[::-1]
+    return original_ct, covered_ct
