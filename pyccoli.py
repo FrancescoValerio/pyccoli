@@ -87,11 +87,11 @@ def ditto_min(st,ct,d,cpu=0):
             break
     return ct
 
-def pyccoli(  filename = 'test',cpu=32):
+def pyccoli(  filename,cpu=0):
     output_generation = False
     #cpu sets the amount of cores to be used, 0 uses all
 
-    st, d = import_dat(f'./{filename}.dat')
+    st, d = import_dat(filename)
     
     
     cand = product(st,st)
@@ -130,11 +130,11 @@ def pyccoli(  filename = 'test',cpu=32):
     else:
         while True:
             gen += 1
-            ct, used = ditto_plus(cand,st,ct,d,mdl,16)
+            ct, used = ditto_plus(cand,st,ct,d,mdl,cpu)
             
             #mdl = mdl_calc(ct,d,st)
             
-            ct = ditto_min(st,ct,d,16)
+            ct = ditto_min(st,ct,d,cpu)
             
             
             if not mdl_calc(ct,d,st)<mdl:
