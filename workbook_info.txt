@@ -25,9 +25,7 @@ United Health compared with Travellers combining the patterns
 from 5 and 6 to see the difference
 
 workbook 7
-is this also the case with United health and Mcdonalds?
-that when taken from the dowjones instead of when taken just
-together you get different patterns? Yes
+United Health compared with McDonalds from their own data
 
 workbook 8 
 Bitcoin
@@ -42,3 +40,6 @@ exxon
 
 workbook 11 
 Bitcoin hourly
+
+workbook 12
+United  Health en McDonalds index+stocks
