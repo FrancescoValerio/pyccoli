@@ -137,7 +137,7 @@ def xyc(df2,date,data,color):
 import pandas as pd
 from import_data import import_dat
 from collections import OrderedDict, Counter
-from pattern_finder import painter
+from pattern_finder import painter as p2
 from cover import cov_order
 
 
@@ -185,7 +185,7 @@ def create_codetables(data,codetable):
     # For patterns in order, go over the dataset
     for x in c_ord_patterns:
         # 'Paint' the dataset with 0's where covered and return p amount
-        d,num = painter(x,d)
+        d,num = p2(x,d)
         # Use pattern amount for value, and pattern for key, for dict
         c[x] = num
         
