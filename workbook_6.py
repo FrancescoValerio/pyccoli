@@ -72,22 +72,22 @@ df2['patterns'] = [str(x) for x in d2[0]]
 #%%
 config = { 
           #Red
-          ((0, (3,)), (1, (3,))):'crimson', 
+          ((0, (3,)), (1, (3,))):'deepskyblue', 
           #Orange
-          ((0, (4,)), (1, (4,))):'crimson', 
+          ((0, (4,)), (1, (4,))):'deepskyblue', 
           #Cyan blue
-          ((0, (3,)), (1, (4,))):'crimson',
+          ((0, (3,)), (1, (4,))):'deepskyblue',
           #Red
-          ((0, (2,)), (1, (2,))):'crimson',
+          ((0, (2,)), (1, (2,))):'deepskyblue',
           
         #Red
-          ((0, (1,)), (1, (1,))):'deepskyblue', 
+          ((0, (1,)), (1, (1,))):'crimson', 
           #Orange
-          ((0, (2,)), (1, (4,))):'deepskyblue', 
+          ((0, (2,)), (1, (4,))):'crimson', 
           #Cyan blue
-          ((0, (5,)), (1, (4,))):'deepskyblue',
+          ((0, (5,)), (1, (4,))):'crimson',
           #Red
-          ((0, (3,)), (1, (3,3))):'deepskyblue',
+          ((0, (3,)), (1, (3,3))):'crimson',
                    
  'None':'#f1f1f1'}
 # %%
@@ -141,7 +141,7 @@ output_file('TRV_UNH(nowmixed).html')
 
 
 p = figure(x_axis_type='datetime' ,plot_width=1440, plot_height=600,
-            title="United Health, Travellers (4 patterns)")
+            title="United Health and Travellers Price")
 
 
 p.circle(x='Date', y='UNHclose',name='unh', alpha=0,
